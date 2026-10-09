@@ -8,7 +8,7 @@ const collegeSchema = new mongoose.Schema({
     },
     shortName:{
       type:String, 
-      required:true,
+    
       trim:true
     },
     location:{
@@ -24,7 +24,7 @@ const collegeSchema = new mongoose.Schema({
       },
       pincode:{
         type:String,
-        required:true,
+       
         trim:true
       },
      

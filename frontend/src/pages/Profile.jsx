@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import EditProfileModal from '../components/EditProfileModal';
 import ListingsSection from '../components/ListingsSection';
-import OffersSection from '../components/OffersSection';
 import StartConversationButton from '../components/StartConversationButton';
 import { fetchListingsBySeller, fetchMyListings } from '../services/listingService';
 import { 
@@ -300,8 +299,6 @@ const Profile = () => {
         isLoading={listingsLoading}
         error={listingsError}
       />
-
-      {isOwner && <OffersSection />}
 
       {/* Edit Profile Modal */}
       {isOwner && (

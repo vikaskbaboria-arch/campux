@@ -95,7 +95,7 @@ const OffersSection = () => {
   const offers = activeTab === 'received' ? receivedOffers : sentOffers;
 
   return (
-    <section className="mt-14" aria-labelledby="offers-heading">
+    <section aria-labelledby="offers-heading">
       <div className="flex flex-col gap-4 border-b border-white/[0.08] pb-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 id="offers-heading" className="text-xl font-bold tracking-tight text-white sm:text-2xl">

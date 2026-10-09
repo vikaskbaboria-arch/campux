@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { User, LogOut, ArrowRight, Menu, X } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -62,6 +63,14 @@ const Navbar = () => {
                 }`}
               >
                 Profile
+              </Link>
+              <Link
+                to="/offers"
+                className={`text-xs tracking-wider uppercase transition-colors ${
+                  isActive('/offers') ? 'text-white font-medium' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Offers
               </Link>
               <Link
                 to="/messages"
@@ -129,6 +138,8 @@ const Navbar = () => {
             </div>
           )}
 
+          <ThemeToggle showLabel={false} />
+
           {/* Mobile hamburger button */}
           <button
             type="button"
@@ -171,6 +182,15 @@ const Navbar = () => {
                   }`}
                 >
                   My Profile
+                </Link>
+                <Link
+                  to="/offers"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-3.5 py-2.5 rounded-xl text-xs uppercase tracking-wider font-semibold transition-colors ${
+                    isActive('/offers') ? 'bg-zinc-900 text-white border border-white/10' : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Offers
                 </Link>
                 <Link
                   to="/messages"

@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import College from './pages/College';
 import ListingDetails from './pages/ListingDetails';
 import Messages from './pages/Messages';
+import Offers from './pages/Offers';
 import ProtectedRoute from './components/ProtectedRoute';
 
 class MessagesErrorBoundary extends React.Component {
@@ -52,7 +53,7 @@ function App() {
   const hideFooter = location.pathname.startsWith('/messages');
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans selection:bg-white selection:text-black">
+    <div className="app-shell min-h-screen bg-black text-zinc-100 flex flex-col font-sans selection:bg-white selection:text-black">
       <Navbar />
       <main className="flex-1 flex flex-col w-full">
         <Routes>
@@ -60,6 +61,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/listing/:listingId" element={<ListingDetails />} />
+          <Route
+            path="/offers"
+            element={
+              <ProtectedRoute>
+                <Offers />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/messages"
             element={

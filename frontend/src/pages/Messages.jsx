@@ -360,11 +360,11 @@ const Messages = () => {
                 <MessageCircle className="mx-auto h-8 w-8 text-zinc-700" />
                 <p className="mt-3 text-sm font-medium text-zinc-300">No messages found</p>
                 <p className="mt-1 text-xs leading-5 text-zinc-500">
-                  New offers create a chat automatically. For older offers, open your profile and choose Chat about offer.
+                  New offers create a chat automatically. You can review and respond to older offers on your offers page.
                 </p>
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  <Link to="/profile" className="rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200">
-                    View my offers
+                  <Link to="/offers" className="rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200">
+                    View offers
                   </Link>
                   <Link to="/" className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-300 transition hover:border-white/25 hover:text-white">
                     Browse listings

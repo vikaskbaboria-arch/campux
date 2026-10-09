@@ -30,6 +30,7 @@ const ListingDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [offerFormOpen, setOfferFormOpen] = useState(false);
   const [offerPrice, setOfferPrice] = useState('');
   const [offerSubmitting, setOfferSubmitting] = useState(false);
   const [offerMessage, setOfferMessage] = useState('');
@@ -62,6 +63,12 @@ const ListingDetails = () => {
     };
   }, [listingId]);
 
+  useEffect(() => {
+    if (offerFormOpen) {
+      document.getElementById('make-offer-form')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [offerFormOpen]);
+
   if (loading) {
     return (
       <div className="flex min-h-[65vh] flex-1 items-center justify-center">
@@ -93,6 +100,7 @@ const ListingDetails = () => {
   const seller = listing.seller && typeof listing.seller === 'object' ? listing.seller : {};
   const sellerId = seller._id || listing.seller;
   const isOwner = isAuthenticated && String(user?._id) === String(sellerId);
+  const isListingAvailable = !listing.status || listing.status === 'Available';
   const college = listing.college && typeof listing.college === 'object' ? listing.college : null;
   const formattedDate = listing.createdAt
     ? new Date(listing.createdAt).toLocaleDateString('en-US', {
@@ -209,7 +217,7 @@ const ListingDetails = () => {
               <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-zinc-300">
                 {listing.category}
               </span>
-              <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-emerald-400">
+              <span className={`rounded-full border px-3 py-1 text-[10px] font-mono uppercase tracking-wider ${isListingAvailable ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border-white/10 bg-white/[0.04] text-zinc-400'}`}>
                 {listing.status || 'Available'}
               </span>
             </div>
@@ -220,6 +228,38 @@ const ListingDetails = () => {
             <p className="mt-4 text-3xl font-extrabold tracking-tight text-white">
               ₹{Number(listing.price).toLocaleString('en-IN')}
             </p>
+
+            {isOwner ? (
+              <Link
+                to="/offers"
+                className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-wider text-zinc-200 transition hover:border-white/30 hover:text-white"
+              >
+                Review offers
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            ) : isListingAvailable && (
+              isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => setOfferFormOpen((isOpen) => !isOpen)}
+                  aria-expanded={offerFormOpen}
+                  aria-controls="make-offer-form"
+                  className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                  {offerFormOpen ? 'Close offer form' : 'Make an offer'}
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  state={{ from: { pathname: `/listing/${listingId}` } }}
+                  className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200"
+                >
+                  Make an offer
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              )
+            )}
 
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-zinc-400">
               <span>Condition: <strong className="font-medium text-zinc-200">{listing.condition}</strong></span>
@@ -240,8 +280,8 @@ const ListingDetails = () => {
               <p className="mt-3 whitespace-pre-line text-sm leading-7 text-zinc-200">{listing.description}</p>
             </div>
 
-            {!isOwner && listing.status === 'Available' && (
-              <div className="mt-7 border-t border-white/10 pt-6">
+            {!isOwner && isListingAvailable && isAuthenticated && offerFormOpen && (
+              <div id="make-offer-form" className="mt-5 border-t border-white/10 pt-6">
                 <h2 className="text-xs font-mono uppercase tracking-wider text-zinc-400">Make an offer</h2>
                 {isAuthenticated ? (
                   <form onSubmit={handleOfferSubmit} className="mt-4 space-y-3">

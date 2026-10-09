@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 import { 
   ShoppingBag, 
   Tag, 
@@ -220,11 +221,14 @@ const Landing = () => {
           <div className="space-y-6">
             <div className="flex items-start justify-between">
               {/* Brand Name matching Blyss */}
-              <Link to="/" className="inline-block group">
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase font-sans">
-                  CAMPUX
-                </span>
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link to="/" className="inline-block group">
+                  <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase font-sans">
+                    CAMPUX
+                  </span>
+                </Link>
+                <ThemeToggle showLabel={false} />
+              </div>
 
               {/* Multi-column Navigation Links matching screenshot */}
               <div className="flex items-start gap-8 sm:gap-12 text-xs sm:text-sm">
