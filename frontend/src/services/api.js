@@ -1,9 +1,8 @@
 import axios from 'axios';
-const API_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:3000"
-).replace(/\/+$/, "");
-
-const API_BASE_URL = `${API_URL}/api/v1`;
+const API_URL = (import.meta.env.VITE_API_URL || '').trim().replace(/\/+$/, '');
+const API_BASE_URL = API_URL
+  ? `${API_URL.replace(/\/api\/v1$/i, '')}/api/v1`
+  : '/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -12,13 +11,6 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
-console.log("API_BASE_URL:", API_BASE_URL);
-
-api.interceptors.request.use((config) => {
-  console.log("Request URL:", config.baseURL + config.url);
-  return config;
-});
-
 // Interceptor to attach accessToken from localStorage if present
 api.interceptors.request.use(
   (config) => {

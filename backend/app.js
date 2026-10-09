@@ -1,14 +1,13 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { getAllowedOrigins } from "./config/cors.js";
 
 const app =express()
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN
-      : "http://localhost:5173",
+    origin: getAllowedOrigins(),
     credentials: true,
   })
 );

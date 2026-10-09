@@ -3,14 +3,12 @@ import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
 import Conversation from "../models/conversation.model.js";
 import User from "../models/User.model.js";
+import { getAllowedOrigins } from "../config/cors.js";
 
 export const initializeSocketServer = (httpServer) => {
   const io = new Server(httpServer, {
     cors: {
-      origin:
-        process.env.CORS_ORIGIN === "*"
-          ? true
-          : process.env.CORS_ORIGIN || "http://localhost:5173",
+      origin: getAllowedOrigins(),
       credentials: true,
     },
   });
