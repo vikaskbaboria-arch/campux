@@ -8,9 +8,9 @@ const healthcheck = asyncHandler(async (req, res) => {
     if(!req){
         throw new ApiError(400,"Invalid request")
     }
-    return res.json(200,
-        new ApiResponse(200,{},"Everything is ok")
-    )
+    return res.status(200).json(
+        new ApiResponse(200, {}, "Everything is ok")
+    );
 })
 
 export {
