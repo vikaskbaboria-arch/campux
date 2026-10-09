@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #000000;
+    color: #f4f4f5;
+  }
+}
+
+/* Custom sleek scrollbar for minimal dark aesthetics */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2e2e2e;
+}
+
+/* Subtle glow utilities */
+.glow-subtle {
+  box-shadow: 0 0 25px -5px rgba(255, 255, 255, 0.05);
+}
+
+.glow-card {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes campux-wordmark-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.campux-wordmark-track {
+  display: flex;
+  width: max-content;
+  animation: campux-wordmark-scroll 20s linear infinite;
+  will-change: transform;
+}
+
+.campux-wordmark-viewport {
+  position: relative;
+  overflow-x: clip;
+}
+
+.campux-magnifier {
+  position: absolute;
+  z-index: 10;
+  top: var(--lens-top, 0);
+  left: var(--lens-left, 0);
+  width: 128px;
+  height: 128px;
+  border: 2px solid rgb(255 255 255 / 75%);
+  border-radius: 50%;
+  background: #050505;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.88);
+  transition: opacity 120ms ease, transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  visibility: hidden;
+}
+
+.campux-magnifier.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+}
+
+.campux-magnifier-window {
+  position: absolute;
+  inset: 3px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #050505;
+}
+
+.campux-magnifier-text {
+  position: absolute;
+  top: var(--lens-text-top, 0);
+  left: var(--lens-text-left, 0);
+  width: max-content;
+  transform: scale(1.8);
+  transform-origin: top left;
+}
+
+.about-reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.about-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes about-mode-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.about-mode-copy {
+  animation: about-mode-enter 280ms ease-out both;
+}
+
+@keyframes about-photo-enter {
+  from {
+    opacity: 0.65;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.about-photo-enter {
+  animation: about-photo-enter 420ms ease-out;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-slow:hover,
+.marquee-container:hover .animate-marquee-slow {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campux-wordmark-track,
+  .animate-marquee-slow {
+    animation: none;
+  }
+
+  .about-reveal,
+  .about-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .campux-magnifier {
+    transition: none;
+  }
+
+  .about-mode-copy {
+    animation: none;
+  }
+
+  .about-photo-enter {
+    animation: none;
+  }
+}
