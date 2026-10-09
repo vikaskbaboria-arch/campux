@@ -12,6 +12,12 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+console.log("API_BASE_URL:", API_BASE_URL);
+
+api.interceptors.request.use((config) => {
+  console.log("Request URL:", config.baseURL + config.url);
+  return config;
+});
 
 // Interceptor to attach accessToken from localStorage if present
 api.interceptors.request.use(
