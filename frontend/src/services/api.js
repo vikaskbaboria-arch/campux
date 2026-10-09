@@ -1,7 +1,7 @@
 import axios from 'axios';
-const API_URL = import.meta.env.VITE_API_URL;
-// Vite proxies /api to the backend on http://localhost:3000 in development
-
+const API_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:3000"
+).replace(/\/+$/, "");
 
 const API_BASE_URL = `${API_URL}/api/v1`;
 
