@@ -9,6 +9,11 @@ const toastStyles = {
     classes: 'border-orange-300/20 bg-[#211512] text-orange-50',
     iconClasses: 'text-[#fb9a74]',
   },
+  welcome: {
+    icon: CheckCircle2,
+    classes: 'border-emerald-400/35 bg-[#0d2818]/95 text-emerald-100 shadow-emerald-950/20',
+    iconClasses: 'text-emerald-400',
+  },
   error: {
     icon: AlertCircle,
     classes: 'border-red-500/20 bg-[#1a1011] text-red-100',
@@ -36,8 +41,15 @@ export const ToastProvider = ({ children }) => {
   const showToast = useCallback((message, type = 'info') => {
     if (!message) return;
     const id = ++nextId.current;
-    const toastType = toastStyles[type] ? type : 'info';
-    setToasts((current) => [...current, { id, message, type: toastType }]);
+    const isLoginOrWelcome =
+      type === 'welcome' ||
+      type === 'login' ||
+      (typeof message === 'string' &&
+        /welcome|logged\s*in|signed\s*in\s*successfully/i.test(message) &&
+        !/signed\s*out|logged\s*out/i.test(message));
+
+    const resolvedType = isLoginOrWelcome ? 'welcome' : (toastStyles[type] ? type : 'info');
+    setToasts((current) => [...current, { id, message, type: resolvedType }]);
     timers.current.set(id, window.setTimeout(() => dismissToast(id), 4200));
   }, [dismissToast]);
 

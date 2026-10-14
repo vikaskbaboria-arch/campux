@@ -135,8 +135,8 @@ const College = () => {
       <section className="pb-7">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-white/[0.08]">
           {/* Logo / Monogram and College info */}
-          <div className="flex items-center gap-5">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full sm:w-auto">
+            <div className="relative shrink-0">
               {college.logo ? (
                 <img
                   src={college.logo}
@@ -144,20 +144,20 @@ const College = () => {
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-contain p-2"
                 />
               ) : (
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-zinc-900/80 flex items-center justify-center text-xl sm:text-2xl font-extrabold text-white">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-zinc-900/80 border border-white/10 flex items-center justify-center text-xl sm:text-2xl font-extrabold text-white">
                   {college.shortName || college.name?.[0]?.toUpperCase() || 'COL'}
                 </div>
               )}
               {college.isVerified && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] flex items-center justify-center">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center">
                   <span className="w-3.5 h-3.5 rounded-full bg-emerald-400"></span>
                 </div>
               )}
             </div>
 
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight break-words">
                   {college.name}
                 </h1>
                 {college.shortName && (
@@ -183,12 +183,12 @@ const College = () => {
 
           {/* Website Link action */}
           {college.collegeSite && (
-            <div className="self-end sm:self-auto">
+            <div className="w-full sm:w-auto">
               <a
                 href={college.collegeSite.startsWith('http') ? college.collegeSite : `https://${college.collegeSite}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-xs text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 transition-all flex items-center gap-2 font-medium"
+                className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-xs text-zinc-200 hover:text-white border border-white/10 hover:border-white/20 transition-all flex items-center gap-2 font-medium"
               >
                 <Globe className="w-3.5 h-3.5" />
                 <span>Official Campus Site</span>

@@ -172,9 +172,41 @@ html[data-theme="light"] [class~="bg-black"] {
   background-color: #f4f4f5 !important;
 }
 
+/* Headers and navigation with blur/opacity */
+html[data-theme="light"] header,
+html[data-theme="light"] [class*="bg-black/90"],
+html[data-theme="light"] [class*="bg-black/95"] {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Modal and menu backdrop overlays */
+html[data-theme="light"] .fixed[class*="bg-black/"] {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Floating overlay pills on top of images */
+html[data-theme="light"] [class*="bg-black/70"],
+html[data-theme="light"] [class*="bg-black/75"],
+html[data-theme="light"] [class*="bg-black/65"],
+html[data-theme="light"] [class*="bg-black/60"] {
+  background-color: rgba(24, 24, 27, 0.8) !important;
+  color: #ffffff !important;
+}
+
+/* Gradient fades */
+html[data-theme="light"] .from-black {
+  --tw-gradient-from: #f4f4f5 !important;
+  --tw-gradient-stops: #f4f4f5, transparent !important;
+}
+
 html[data-theme="light"] [class*="bg-zinc-950"],
 html[data-theme="light"] [class*="bg-zinc-900"] {
   background-color: #ffffff !important;
+}
+
+html[data-theme="light"] [class*="bg-zinc-900/"] {
+  background-color: #f4f4f5 !important;
+  border-color: #e4e4e7 !important;
 }
 
 html[data-theme="light"] [class*="bg-zinc-800"] {
@@ -193,11 +225,51 @@ html[data-theme="light"] [class~="bg-white"] {
   background-color: #18181b !important;
 }
 
-html[data-theme="light"] [class~="bg-red-950/20"],
-html[data-theme="light"] [class~="bg-red-950/30"],
-html[data-theme="light"] [class~="bg-red-950/40"],
-html[data-theme="light"] [class~="bg-red-950/60"] {
+/* Alert and Status Badges */
+html[data-theme="light"] [class*="bg-red-950/"] {
   background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #b91c1c !important;
+}
+
+html[data-theme="light"] [class*="bg-amber-950/"] {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+}
+
+html[data-theme="light"] [class*="bg-amber-950/"] * {
+  color: #92400e !important;
+}
+
+html[data-theme="light"] [class*="bg-amber-500/"] {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+html[data-theme="light"] [class*="bg-emerald-500/"] {
+  background-color: #ecfdf5 !important;
+  color: #047857 !important;
+}
+
+html[data-theme="light"] [class*="bg-red-500/"] {
+  background-color: #fef2f2 !important;
+  color: #b91c1c !important;
+}
+
+/* Light Green Welcome / Login Toast in Light Theme */
+html[data-theme="light"] [class*="bg-[#0d2818]"] {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+html[data-theme="light"] [class*="bg-[#0d2818]"] * {
+  color: #065f46 !important;
+}
+
+html[data-theme="light"] [class*="bg-[#0d2818]"] svg {
+  color: #059669 !important;
 }
 
 html[data-theme="light"] [class*="bg-[#08080a]"],
@@ -217,6 +289,51 @@ html[data-theme="light"] [class*="bg-[#181818]"],
 html[data-theme="light"] [class*="bg-[#1a1011]"],
 html[data-theme="light"] [class*="bg-[#211512]"] {
   background-color: #ffffff !important;
+}
+
+/* Inputs, Textareas and Selects in Light Theme */
+html[data-theme="light"] input[class*="bg-"],
+html[data-theme="light"] textarea[class*="bg-"],
+html[data-theme="light"] select[class*="bg-"] {
+  background-color: #f4f4f5 !important;
+  border-color: #d4d4d8 !important;
+  color: #18181b !important;
+}
+
+html[data-theme="light"] input[class*="bg-"]:focus,
+html[data-theme="light"] textarea[class*="bg-"]:focus,
+html[data-theme="light"] select[class*="bg-"]:focus {
+  background-color: #ffffff !important;
+  border-color: #18181b !important;
+}
+
+html[data-theme="light"] select option {
+  background-color: #ffffff !important;
+  color: #18181b !important;
+}
+
+/* Hover States in Light Theme */
+html[data-theme="light"] [class*="hover:bg-zinc-900"]:hover,
+html[data-theme="light"] [class*="hover:bg-zinc-800"]:hover,
+html[data-theme="light"] [class*="hover:bg-[#181818]"]:hover,
+html[data-theme="light"] [class*="hover:bg-[#161616]"]:hover {
+  background-color: #e4e4e7 !important;
+  color: #18181b !important;
+}
+
+html[data-theme="light"] [class~="bg-white"][class*="hover:bg-zinc-200"]:hover {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] [class*="hover:border-white"]:hover {
+  border-color: #a1a1aa !important;
+}
+
+/* Active links in mobile menu dropdown */
+html[data-theme="light"] [class*="bg-[#0a0a0a]"] a[class*="bg-zinc-900"] {
+  background-color: #e4e4e7 !important;
+  color: #18181b !important;
 }
 
 html[data-theme="light"] [class~="text-white"],

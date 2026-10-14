@@ -127,7 +127,7 @@ const ListingsSection = ({
         </div>
 
         {/* Filter controls and add item action */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
           <div className="flex items-center bg-[#0a0a0a] p-1 rounded-full border border-white/10">
             {['All', 'Available', 'Sold'].map((f) => (
               <button

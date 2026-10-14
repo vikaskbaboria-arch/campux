@@ -159,9 +159,9 @@ const Profile = () => {
         {/* Top actions & Identity banner */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-white/[0.08]">
           {/* Avatar and basic info */}
-          <div className="flex items-center gap-5">
-            <div className="relative group">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-900 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-white overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full sm:w-auto">
+            <div className="relative group shrink-0">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-white overflow-hidden">
                 {profileData.profilePic ? (
                   <img
                     src={profileData.profilePic}
@@ -186,21 +186,21 @@ const Profile = () => {
                   <span>Edit Pic</span>
                 </button>
               )}
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] flex items-center justify-center z-10">
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] flex items-center justify-center z-10 border border-white/10">
                 <span className="w-3.5 h-3.5 rounded-full bg-emerald-400"></span>
               </div>
             </div>
 
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight break-words">
                   {profileData.name}
                 </h1>
                 <span className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/5">
                   Verified Student
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-400 font-mono mt-0.5">
+              <p className="text-xs sm:text-sm text-zinc-400 font-mono mt-0.5 truncate">
                 @{profileData.username}
               </p>
               <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2">
@@ -208,21 +208,21 @@ const Profile = () => {
                 {collegeId ? (
                   <Link
                     to={`/college/${collegeId}`}
-                    className="font-medium text-zinc-300 hover:text-white hover:underline flex items-center gap-1 transition-colors group/col"
+                    className="font-medium text-zinc-300 hover:text-white hover:underline flex items-center gap-1 transition-colors group/col max-w-full truncate"
                     title={`View ${collegeName} details`}
                   >
-                    <span>{collegeName}</span>
-                    <ArrowUpRight className="w-3 h-3 text-zinc-500 group-hover/col:text-white transition-colors" />
+                    <span className="truncate">{collegeName}</span>
+                    <ArrowUpRight className="w-3 h-3 text-zinc-500 group-hover/col:text-white transition-colors shrink-0" />
                   </Link>
                 ) : (
-                  <span className="font-medium text-zinc-300">{collegeName}</span>
+                  <span className="font-medium text-zinc-300 truncate">{collegeName}</span>
                 )}
               </div>
             </div>
           </div>
 
           {/* Action button (Edit if owner, Contact if viewing another student) */}
-          <div className="w-full sm:w-auto flex items-center justify-start sm:justify-end gap-3">
+          <div className="w-full sm:w-auto flex items-center justify-start sm:justify-end gap-3 mt-1 sm:mt-0">
             {isOwner ? (
               <button
                 onClick={() => setIsEditModalOpen(true)}
@@ -234,7 +234,7 @@ const Profile = () => {
             ) : (
               <StartConversationButton
                 recipientId={profileData._id}
-                className="w-full px-5 py-2.5 sm:w-auto"
+                className="w-full px-5 py-2.5 sm:w-auto justify-center"
               >
                 Message student
               </StartConversationButton>

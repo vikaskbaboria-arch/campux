@@ -10,7 +10,7 @@ export const initializeSocketServer = (httpServer) => {
     cors: {
       origin: getAllowedOrigins(),
       credentials: true,
-    },
+    }, 
   });
 
   io.use(async (socket, next) => {

@@ -46,7 +46,7 @@ const Login = () => {
     <div className="flex-1 flex items-center justify-center px-4 py-10 sm:py-16 w-full">
       <div className="w-full max-w-md">
         {/* Container with stealth dark styling */}
-        <div className="rounded-3xl bg-[#0f1013] border border-white/[0.08] p-8 sm:p-10 shadow-2xl relative">
+        <div className="rounded-3xl bg-[#0f1013] border border-white/[0.08] p-6 sm:p-10 shadow-2xl relative">
           {/* Subtle top pill accent */}
           <div className="flex justify-center mb-6">
             <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-500 bg-zinc-900/80 px-3.5 py-1 rounded-full border border-white/5">

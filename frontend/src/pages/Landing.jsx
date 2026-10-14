@@ -219,7 +219,7 @@ const Landing = () => {
           
           {/* Top Brand & Multi-Column Navigation */}
           <div className="space-y-6">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-8">
               {/* Brand Name matching Blyss */}
               <div className="flex items-center gap-3">
                 <Link to="/" className="inline-block group">
@@ -231,7 +231,7 @@ const Landing = () => {
               </div>
 
               {/* Multi-column Navigation Links matching screenshot */}
-              <div className="flex items-start gap-8 sm:gap-12 text-xs sm:text-sm">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-xs sm:text-sm">
                 <div className="space-y-1.5 font-medium text-zinc-400">
                   <div>
                     <Link to="/register" className="hover:text-white transition-colors">
@@ -292,7 +292,7 @@ const Landing = () => {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
               <Link
                 to={isAuthenticated ? '/profile' : '/register'}
-                className="px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
+                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4 text-zinc-300" />
                 <span>Explore Marketplace</span>
@@ -300,7 +300,7 @@ const Landing = () => {
 
               <Link
                 to={isAuthenticated ? '/profile' : '/login'}
-                className="px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
+                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
               >
                 <Tag className="w-4 h-4 text-zinc-300" />
                 <span>Start Selling</span>
@@ -318,21 +318,21 @@ const Landing = () => {
             <div className="campux-wordmark-track gap-8 pr-8 sm:gap-12 sm:pr-12">
               <h1
                 ref={(element) => { wordmarkTextRefs.current[0] = element; }}
-                className="font-extrabold text-[68px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap"
+                className="font-extrabold text-[52px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap"
               >
                 CAMPUX
               </h1>
               <span
                 ref={(element) => { wordmarkTextRefs.current[1] = element; }}
                 aria-hidden="true"
-                className="font-extrabold text-[68px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap"
+                className="font-extrabold text-[52px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap"
               >
                 CAMPUX
               </span>
             </div>
             <div ref={wordmarkLensRef} className="campux-magnifier" aria-hidden="true">
               <div className="campux-magnifier-window">
-                <div className="campux-magnifier-text font-extrabold text-[68px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap">
+                <div className="campux-magnifier-text font-extrabold text-[52px] sm:text-[105px] md:text-[130px] lg:text-[120px] xl:text-[150px] tracking-tighter leading-none text-white uppercase font-sans whitespace-nowrap">
                   CAMPUX
                 </div>
               </div>

@@ -261,11 +261,11 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
             </form>
 
             {/* Condition Filter */}
-            <div className="flex items-center gap-3">
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 w-full md:w-auto">
               <select
                 value={selectedCondition}
                 onChange={(e) => setSelectedCondition(e.target.value)}
-                className="border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
+                className="w-full sm:w-auto border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
                 title="Filter by condition"
               >
                 <option value="All" className="bg-zinc-900 text-white">All Conditions</option>
@@ -286,7 +286,7 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                   );
                   if (opt) setSelectedSort(opt);
                 }}
-                className="border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
+                className="w-full sm:w-auto border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
                 title="Sort listings"
               >
                 {SORT_OPTIONS.map((opt) => (
@@ -497,15 +497,15 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
 
             {/* Pagination Controls */}
             {pagination.totalPages > 1 && (
-              <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                <p className="text-xs font-mono text-zinc-400">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
+                <p className="text-xs font-mono text-zinc-400 text-center sm:text-left">
                   Showing Page {pagination.page} of {pagination.totalPages} ({pagination.total} items)
                 </p>
                 <div className="flex items-center gap-2">
                   <button
                     disabled={!pagination.hasPreviousPage}
                     onClick={() => loadListings(pagination.page - 1)}
-                    className="flex items-center gap-1 px-2 py-2 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/10 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
                     <span>Prev</span>
@@ -513,7 +513,7 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                   <button
                     disabled={!pagination.hasNextPage}
                     onClick={() => loadListings(pagination.page + 1)}
-                    className="flex items-center gap-1 px-2 py-2 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/10 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
                   >
                     <span>Next</span>
                     <ChevronRight className="w-3.5 h-3.5" />

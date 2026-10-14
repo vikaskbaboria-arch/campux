@@ -87,7 +87,7 @@ const Navbar = () => {
         {/* Right Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-3">
           {isAuthenticated ? (
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden md:flex items-center gap-2 sm:gap-3">
               <Link
                 to="/profile"
                 className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 hover:border-white/25 transition-all text-xs text-zinc-300 hover:text-white"
@@ -162,7 +162,35 @@ const Navbar = () => {
           />
 
           {/* Floating dropdown menu overlay */}
-          <div className="absolute top-full left-0 right-0 z-50 md:hidden border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-2xl px-5 py-5 space-y-3 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+          <div className="absolute top-full left-0 right-0 z-50 md:hidden border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-2xl px-5 py-5 space-y-3 shadow-2xl max-h-[calc(100vh-4rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200">
+            {isAuthenticated && (
+              <Link
+                to="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-2xl bg-zinc-900/80 border border-white/10 hover:border-white/20 transition-all mb-2 group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-sm text-white font-bold overflow-hidden shrink-0">
+                  {user?.profilePic ? (
+                    <img
+                      src={user.profilePic}
+                      alt={user?.name || 'User'}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    user?.name?.[0]?.toUpperCase() || 'U'
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-white truncate">{user?.name || 'Student'}</p>
+                  <p className="text-xs text-zinc-400 font-mono truncate">@{user?.username || 'user'}</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors shrink-0" />
+              </Link>
+            )}
+
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -201,16 +229,18 @@ const Navbar = () => {
                 >
                   Messages
                 </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs uppercase tracking-wider font-semibold text-red-400 hover:bg-red-950/20 transition-colors flex items-center justify-between cursor-pointer"
-                >
-                  <span>Sign Out</span>
-                  <LogOut className="w-4 h-4" />
-                </button>
+                <div className="pt-2 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs uppercase tracking-wider font-semibold text-red-400 hover:bg-red-950/20 hover:text-red-300 transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Sign Out</span>
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
               </>
             ) : (
               <div className="pt-2 flex flex-col gap-2 border-t border-white/5">
