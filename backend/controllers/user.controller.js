@@ -5,7 +5,7 @@ import College from "../models/college.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
 import mongoose, { isValidObjectId } from "mongoose";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnImageKit } from "../utils/imagekit.js";
 
 const getAuthCookieOptions = () => ({
   httpOnly: true,
@@ -231,13 +231,13 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
   if (req.file) {
     console.log(req.file.path)
-    const result = await uploadOnCloudinary(req.file.path);
+    const result = await uploadOnImageKit(req.file.path, req.file.originalname);
      console.log("result",result)
     if (!result) {
       throw new ApiError(500, "Profile picture upload failed");
     }
 
-    updateData.profilePic = result.secure_url;
+    updateData.profilePic = result.url;
   } else if (profilePic !== undefined) {
     updateData.profilePic = profilePic;
   }

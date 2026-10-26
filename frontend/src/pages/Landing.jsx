@@ -20,6 +20,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/campus-cycle.png',
     imageAlt: 'Black commuter bicycle with yellow accents',
     imageBackdrop: 'bg-[#efecd9]',
+    stripColor: 'bg-emerald-500',
   },
   {
     id: 'tech',
@@ -30,6 +31,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/student-tech.png',
     imageAlt: 'Scientific calculator and black headphones',
     imageBackdrop: 'bg-[#e8e5ef]',
+    stripColor: 'bg-purple-500',
   },
   {
     id: 'textbooks',
@@ -40,6 +42,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/textbook-stack.png',
     imageAlt: 'Stack of textbooks with colorful study tabs',
     imageBackdrop: 'bg-[#ebe5db]',
+    stripColor: 'bg-amber-500',
   },
   {
     id: 'dorm',
@@ -50,6 +53,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/study-lamp.png',
     imageAlt: 'Adjustable warm-white study lamp',
     imageBackdrop: 'bg-[#46413b]',
+    stripColor: 'bg-orange-500',
   },
   {
     id: 'lab',
@@ -60,6 +64,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/drafting-kit.png',
     imageAlt: 'Technical drawing board and drafting instruments',
     imageBackdrop: 'bg-[#dfe3e8]',
+    stripColor: 'bg-blue-500',
   },
 ];
 const WORDMARK_LENS_SIZE = 128;
@@ -220,7 +225,7 @@ const Landing = () => {
           {/* Top Brand & Multi-Column Navigation */}
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-8">
-              {/* Brand Name matching Blyss */}
+              {/* Brand Name */}
               <div className="flex items-center gap-3">
                 <Link to="/" className="inline-block group">
                   <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase font-sans">
@@ -230,7 +235,7 @@ const Landing = () => {
                 <ThemeToggle showLabel={false} />
               </div>
 
-              {/* Multi-column Navigation Links matching screenshot */}
+              {/* Multi-column Navigation Links */}
               <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-xs sm:text-sm">
                 <div className="space-y-1.5 font-medium text-zinc-400">
                   <div>
@@ -288,27 +293,34 @@ const Landing = () => {
               Securely buy, sell, and exchange college essentials — all in one student-only marketplace built for campus speed, verified safety, and zero commissions. Designed to support instant hostel handoffs, cash-on-meet, and real-time listings, it&apos;s your trusted gateway to university peer-to-peer commerce.
             </p>
 
-            {/* App Store / Google Play styled buttons matching screenshot */}
+            {/* Stats pills row */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[10px] text-zinc-400 border border-white/10 rounded-full px-3 py-1 bg-white/[0.03]">✦ Zero Commission</span>
+              <span className="font-mono text-[10px] text-zinc-400 border border-white/10 rounded-full px-3 py-1 bg-white/[0.03]">✦ Students Only</span>
+              <span className="font-mono text-[10px] text-zinc-400 border border-white/10 rounded-full px-3 py-1 bg-white/[0.03]">✦ Instant Handoff</span>
+            </div>
+
+            {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
               <Link
                 to={isAuthenticated ? '/profile' : '/register'}
-                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
+                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-lg shadow-emerald-500/25 cursor-pointer"
               >
-                <ShoppingBag className="w-4 h-4 text-zinc-300" />
+                <ShoppingBag className="w-4 h-4" />
                 <span>Explore Marketplace</span>
               </Link>
 
               <Link
                 to={isAuthenticated ? '/profile' : '/login'}
-                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/10 bg-[#0e0e0e] hover:bg-[#181818] text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-sm hover:border-white/30 cursor-pointer"
+                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/15 bg-transparent hover:bg-white/5 text-zinc-300 hover:text-white text-xs font-semibold flex items-center gap-2.5 transition-all cursor-pointer"
               >
-                <Tag className="w-4 h-4 text-zinc-300" />
+                <Tag className="w-4 h-4" />
                 <span>Start Selling</span>
               </Link>
             </div>
           </div>
 
-          {/* Bottom Massive Typographic Wordmark matching "SWITCH" in screenshot */}
+          {/* Bottom Massive Typographic Wordmark */}
           <div
             ref={wordmarkViewportRef}
             onPointerMove={updateWordmarkLens}
@@ -342,10 +354,14 @@ const Landing = () => {
 
         {/* ================= RIGHT COLUMN (Interactive Showcase Panel) ================= */}
         <div className="lg:col-span-6 xl:col-span-7 flex flex-col">
-          <div className="h-full rounded-3xl sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden relative">
+          {/* Premium card with gradient backdrop + ambient glow */}
+          <div className="h-full rounded-3xl sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden relative bg-gradient-to-br from-zinc-950 via-[#0d1a0d] to-zinc-950 ring-1 ring-white/5 landing-right-panel">
             
+            {/* Ambient glow orb */}
+            <div className="landing-ambient-glow" aria-hidden="true" />
+
             {/* Top Bar of right panel with "Get started" button */}
-            <div className="flex items-center justify-between pb-6 sm:pb-8">
+            <div className="flex items-center justify-between pb-6 sm:pb-8 relative z-10">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
@@ -355,19 +371,19 @@ const Landing = () => {
 
               <Link
                 to={isAuthenticated ? '/profile' : '/register'}
-                className="px-5 py-2 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                className="px-5 py-2 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider shadow-xl transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
               >
                 {isAuthenticated ? 'My Profile' : 'Get started'}
               </Link>
             </div>
 
-            {/* Product Showcase Carousel: Animated Transition moving from Right to Left */}
-            <div className="my-auto py-4 overflow-hidden relative marquee-container">
+            {/* Product Showcase Carousel */}
+            <div className="my-auto py-4 overflow-hidden relative marquee-container z-10">
               {/* Fade gradients on edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none"></div>
 
-              {/* Carousel tracks with CSS marquee: pauses in place on hover without resetting */}
+              {/* Carousel tracks with CSS marquee */}
               <div
                 className="flex gap-4 sm:gap-5 pb-2 animate-marquee-slow select-none"
               >
@@ -375,48 +391,52 @@ const Landing = () => {
                 {[...SHOWCASE_PRODUCTS, ...SHOWCASE_PRODUCTS].map((product, idx) => (
                   <div
                     key={`${product.id}-${idx}`}
-                    className="w-[260px] sm:w-[280px] shrink-0 rounded-2xl bg-[#121212] border border-white/10 p-4 sm:p-5 flex flex-col justify-between hover:border-white/30 hover:bg-[#161616] transition-all hover:-translate-y-1 group"
+                    className="w-[260px] sm:w-[280px] shrink-0 rounded-2xl bg-[#121212] border border-white/10 overflow-hidden flex flex-col justify-between hover:border-white/25 hover:bg-[#161616] transition-all hover:-translate-y-1 group shadow-lg shadow-black/50 ring-1 ring-white/10"
                   >
-                    {/* Top tag */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                        {product.category}
-                      </span>
-                      <Link
-                        to={isAuthenticated ? '/profile' : '/register'}
-                        className="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white text-zinc-300 hover:text-black text-[10px] font-semibold transition-colors flex items-center gap-1"
-                      >
-                        <span>{product.tag}</span>
-                        <ArrowUpRight className="w-3 h-3" />
-                      </Link>
-                    </div>
+                    <div className="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                      {/* Top tag */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+                          {product.category}
+                        </span>
+                        <Link
+                          to={isAuthenticated ? '/profile' : '/register'}
+                          className="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white text-zinc-300 hover:text-black text-[10px] font-semibold transition-colors flex items-center gap-1"
+                        >
+                          <span>{product.tag}</span>
+                          <ArrowUpRight className="w-3 h-3" />
+                        </Link>
+                      </div>
 
-                    {/* Graphic illustration */}
-                    <div className={`my-2 flex h-32 w-full items-center justify-center overflow-hidden rounded-xl ${product.imageBackdrop}`}>
-                      <img
-                        src={product.image}
-                        alt={product.imageAlt}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
+                      {/* Graphic illustration */}
+                      <div className={`my-2 flex h-32 w-full items-center justify-center overflow-hidden rounded-xl ${product.imageBackdrop}`}>
+                        <img
+                          src={product.image}
+                          alt={product.imageAlt}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
 
-                    {/* Title & Description */}
-                    <div className="pt-3">
-                      <h3 className="text-sm sm:text-base font-bold text-white tracking-tight mb-1 group-hover:text-zinc-200 transition-colors">
-                        {product.title}
-                      </h3>
-                      <p className="text-xs text-zinc-400 font-light line-clamp-2 leading-relaxed">
-                        {product.description}
-                      </p>
+                      {/* Title & Description */}
+                      <div className="pt-3">
+                        <h3 className="text-sm sm:text-base font-bold text-white tracking-tight mb-1 group-hover:text-zinc-200 transition-colors">
+                          {product.title}
+                        </h3>
+                        <p className="text-xs text-zinc-400 font-light line-clamp-2 leading-relaxed">
+                          {product.description}
+                        </p>
+                      </div>
                     </div>
+                    {/* Colored bottom strip based on category */}
+                    <div className={`h-1 w-full ${product.stripColor} opacity-70`} />
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="pt-6 sm:pt-8 flex items-center justify-end border-t border-white/10 text-[11px] text-zinc-500 font-mono">
+            <div className="pt-6 sm:pt-8 flex items-center justify-end border-t border-white/10 text-[11px] text-zinc-500 font-mono relative z-10">
                 Hover the carousel to pause • Click to explore
           </div>
         </div>

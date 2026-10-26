@@ -160,6 +160,51 @@
   animation-play-state: paused !important;
 }
 
+/* ============================================================
+   Custom utility classes — added for visual enhancement
+   ============================================================ */
+
+/* Gradient text utility */
+.gradient-text-emerald {
+  background: linear-gradient(135deg, #34d399, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Elevated card */
+.card-elevated {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+/* Emerald glow shadow */
+.shadow-emerald-glow {
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.15), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* No scrollbar but still scrollable */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Landing page right panel ambient glow orb (radial gradient — Tailwind v4 can't do bg-gradient-radial) */
+.landing-right-panel {
+  position: relative;
+}
+
+.landing-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(16, 90, 46, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
 /* Light theme overrides for the app's dark utility classes. */
 html[data-theme="light"] body,
 html[data-theme="light"] #root,

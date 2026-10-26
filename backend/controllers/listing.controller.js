@@ -8,10 +8,7 @@ import { isValidObjectId } from "mongoose";
 
 const createListing = asyncHandler(async (req, res) => {
   const { title, description, price, category, condition } = req.body;
-  console.log("body", req.body);
-  console.log("BODY:", req.body);
-  console.log("USER:", req.user);
-  console.log("FILES:", req.files);
+
 
   if (!title || !description || !condition || !price || !category) {
     throw new ApiError(400, "information is required for the listing");

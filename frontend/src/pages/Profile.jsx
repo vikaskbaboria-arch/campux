@@ -16,7 +16,8 @@ import {
   ArrowLeft,
   ArrowUpRight,
   AlertCircle,
-  Camera
+  Camera,
+  CheckCircle
 } from 'lucide-react';
 import { getCollegeById } from '../services/collegeService';
 import { getFriendlyErrorMessage } from '../utils/userFeedback';
@@ -160,20 +161,23 @@ const Profile = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-white/[0.08]">
           {/* Avatar and basic info */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full sm:w-auto">
+            {/* Avatar with gradient ring */}
             <div className="relative group shrink-0">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-white overflow-hidden">
-                {profileData.profilePic ? (
-                  <img
-                    src={profileData.profilePic}
-                    alt={profileData.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  profileData.name?.[0]?.toUpperCase() || 'U'
-                )}
+              <div className="p-[2px] rounded-full bg-gradient-to-br from-emerald-500/40 to-transparent ring-2 ring-emerald-500/20 ring-offset-2 ring-offset-black">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-2xl sm:text-3xl font-extrabold text-white overflow-hidden">
+                  {profileData.profilePic ? (
+                    <img
+                      src={profileData.profilePic}
+                      alt={profileData.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    profileData.name?.[0]?.toUpperCase() || 'U'
+                  )}
+                </div>
               </div>
               {isOwner && (
                 <button
@@ -186,8 +190,9 @@ const Profile = () => {
                   <span>Edit Pic</span>
                 </button>
               )}
+              {/* Online indicator — pulsing emerald dot */}
               <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] flex items-center justify-center z-10 border border-white/10">
-                <span className="w-3.5 h-3.5 rounded-full bg-emerald-400"></span>
+                <span className="w-3.5 h-3.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50 animate-pulse"></span>
               </div>
             </div>
 
@@ -196,7 +201,9 @@ const Profile = () => {
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight break-words">
                   {profileData.name}
                 </h1>
-                <span className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/5">
+                {/* Upgraded Verified Student badge */}
+                <span className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                  <CheckCircle className="w-3 h-3" />
                   Verified Student
                 </span>
               </div>
@@ -226,7 +233,7 @@ const Profile = () => {
             {isOwner ? (
               <button
                 onClick={() => setIsEditModalOpen(true)}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-wider hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Edit Profile</span>
@@ -242,9 +249,9 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Key Student Details Grid */}
-        <div className={`grid grid-cols-2 ${isOwner ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-x-6 mt-5`}>
-          <div className="py-4 border-b border-white/10 sm:border-b-0 sm:border-r sm:border-white/10">
+        {/* Key Student Details Grid — card-within-card treatment */}
+        <div className={`grid grid-cols-2 ${isOwner ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-3 mt-5`}>
+          <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
             <div className="flex items-center gap-2 text-zinc-400 mb-1">
               <BookOpen className="w-3.5 h-3.5" />
               <span className="text-[10px] font-mono uppercase">Branch</span>
@@ -254,7 +261,7 @@ const Profile = () => {
             </p>
           </div>
 
-          <div className="py-4 border-b border-white/10 sm:border-b-0 sm:border-r sm:border-white/10">
+          <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
             <div className="flex items-center gap-2 text-zinc-400 mb-1">
               <GraduationCap className="w-3.5 h-3.5" />
               <span className="text-[10px] font-mono uppercase">Academic Year</span>
@@ -264,17 +271,19 @@ const Profile = () => {
             </p>
           </div>
 
-          {isOwner && <div className="py-4 border-b border-white/10 sm:border-b-0 sm:border-r sm:border-white/10">
-            <div className="flex items-center gap-2 text-zinc-400 mb-1">
-              <Mail className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-mono uppercase">Campus Email</span>
+          {isOwner && (
+            <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+              <div className="flex items-center gap-2 text-zinc-400 mb-1">
+                <Mail className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-mono uppercase">Campus Email</span>
+              </div>
+              <p className="text-sm font-mono text-zinc-300 truncate" title={profileData.email}>
+                {profileData.email}
+              </p>
             </div>
-             <p className="text-sm font-mono text-zinc-300 truncate" title={profileData.email}>
-              {profileData.email}
-            </p>
-          </div>}
+          )}
 
-          <div className="py-4 border-b border-white/10 sm:border-b-0">
+          <div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
             <div className="flex items-center gap-2 text-zinc-400 mb-1">
               <Calendar className="w-3.5 h-3.5" />
               <span className="text-[10px] font-mono uppercase">Member Since</span>

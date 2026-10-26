@@ -76,13 +76,14 @@ const Register = () => {
   return (
     <div className="flex-1 flex items-center justify-center px-4 py-10 sm:py-16 w-full">
       <div className="w-full max-w-md">
-        {/* Stealth dark card */}
-        <div className="rounded-3xl bg-[#0f1013] border border-white/[0.08] p-6 sm:p-10 shadow-2xl relative">
-          {/* Subtle top indicator */}
+        {/* Gradient dark card */}
+        <div className="rounded-3xl bg-gradient-to-b from-[#0f1013] to-[#0a0a0c] border border-white/[0.08] p-6 sm:p-10 shadow-2xl shadow-black/80 relative">
+
+          {/* Decorative brand icon at top */}
           <div className="flex justify-center mb-6">
-            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-500 bg-zinc-900/80 px-3.5 py-1 rounded-full border border-white/5">
-              Registration
-            </span>
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <span className="font-mono text-sm font-bold tracking-tighter text-emerald-400">CX</span>
+            </div>
           </div>
 
           <div className="text-center mb-8">
@@ -107,7 +108,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="e.g. Alex Johnson"
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
                 required
               />
             </div>
@@ -123,7 +124,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="e.g. alexj"
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
                 required
               />
             </div>
@@ -139,7 +140,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="e.g. alex@university.edu"
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
                 required
               />
             </div>
@@ -156,7 +157,7 @@ const Register = () => {
                   onChange={handleChange}
                   placeholder="Min 6 characters"
                   disabled={loading}
-                  className="w-full px-4 py-3 pr-11 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-all"
+                  className="w-full px-4 py-3 pr-11 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
                   required
                 />
                 <button
@@ -181,7 +182,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Re-enter password"
                 disabled={loading}
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0c] border border-white/10 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition-all"
                 required
               />
             </div>
@@ -189,10 +190,10 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-4 py-3.5 px-6 rounded-full bg-white text-black text-xs uppercase tracking-widest font-bold hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full mt-4 py-3.5 px-6 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs uppercase tracking-widest font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01] active:scale-[0.99]"
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
                   <span>Create Account</span>

@@ -51,6 +51,21 @@ const SORT_OPTIONS = [
   { label: 'Oldest First', sortBy: 'createdAt', sortType: 'asc' },
 ];
 
+// Helper: get condition badge color
+const getConditionColor = (condition) => {
+  switch (condition?.toLowerCase()) {
+    case 'new':
+    case 'like new':
+      return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+    case 'used':
+      return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+    case 'refurbished':
+      return 'bg-zinc-500/20 text-zinc-300 border-zinc-500/30';
+    default:
+      return 'bg-zinc-500/20 text-zinc-300 border-zinc-500/30';
+  }
+};
+
 const Home = () => {
   const { isAuthenticated, user, updateProfile } = useAuth();
 
@@ -195,7 +210,8 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                {/* Section header with decorative left accent */}
+                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight border-l-2 border-emerald-400 pl-3">
                   Campus Marketplace
                 </h1>
                 {collegeId && (
@@ -216,11 +232,11 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
               </p>
             </div>
 
-            {/* Top Post Item Button */}
+            {/* Top Post Item Button - emerald upgrade */}
             <div className="flex items-center gap-3 w-full md:w-auto">
               <button
                 onClick={() => setIsAddModalOpen(true)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-semibold uppercase tracking-wider text-black transition-colors hover:bg-zinc-200 md:w-auto sm:text-sm cursor-pointer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:shadow-lg hover:shadow-emerald-500/25 md:w-auto sm:text-sm cursor-pointer"
               >
                 <Plus className="w-4 h-4 stroke-[2.5]" />
                 <span>Post Item for Sale</span>
@@ -302,7 +318,7 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
             </div>
           </div>
 
-          {/* Category Horizontal Pills */}
+          {/* Category Horizontal Pills — upgraded active/inactive styles */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
             {CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat;
@@ -310,10 +326,10 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 transition-all cursor-pointer border ${
                     isActive
-                      ? 'border-b-2 border-white text-white'
-                      : 'border-b-2 border-transparent text-zinc-500 hover:text-white'
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                      : 'border-transparent text-zinc-500 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   {cat}
@@ -392,13 +408,16 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
             <div className="flex items-end justify-between gap-4 border-b border-white/10 pb-3">
               <div>
                 <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">The campus feed</p>
-                <h2 className="mt-1 text-lg font-semibold tracking-tight text-white">Find your next useful thing</h2>
+                {/* Section header with decorative left accent */}
+                <h2 className="mt-1 text-lg font-semibold tracking-tight text-white border-l-2 border-emerald-400 pl-3">
+                  Find your next useful thing
+                </h2>
               </div>
               <span className="shrink-0 text-[10px] font-mono text-zinc-500">
                 {pagination.total || listings.length} items
               </span>
             </div>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {listings.map((item) => {
                 const coverImage = item.images?.[0]?.url || null;
                 const imageCount = item.images?.length || 0;
@@ -410,10 +429,10 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                   <Link
                     key={item._id}
                     to={`/listing/${item._id}`}
-                    className="group flex min-w-0 flex-col transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70"
+                    className="group flex min-w-0 flex-col transition-all duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 rounded-xl ring-1 ring-white/[0.07] shadow-lg shadow-black/40 hover:ring-emerald-500/30 hover:shadow-emerald-900/20 bg-[#111] overflow-hidden"
                   >
-                    {/* Image Container */}
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[#111]">
+                    {/* Image Container — flush to card top */}
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-800">
                       {coverImage ? (
                         <img
                           src={coverImage}
@@ -422,36 +441,36 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-zinc-600 transition-colors group-hover:text-zinc-300">
-                          <ShoppingBag className="w-6 h-6" />
+                        <div className="absolute inset-0 flex items-center justify-center text-zinc-600 transition-colors group-hover:text-zinc-400 bg-gradient-to-br from-zinc-900 to-zinc-800">
+                          <ShoppingBag className="w-8 h-8" />
                         </div>
                       )}
 
-                      {/* Top Category Badge */}
-                      <span className="absolute left-3 top-3 text-[10px] font-medium uppercase tracking-wide text-white drop-shadow-md">
+                      {/* Top Category Badge — styled pill */}
+                      <span className="absolute left-3 top-3 bg-black/60 backdrop-blur-sm rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-white">
                         {item.category}
                       </span>
 
                       {/* Photo count indicator if multiple */}
                       {imageCount > 1 && (
-                        <span className="absolute right-3 top-3 flex items-center gap-1 text-[10px] font-mono text-white drop-shadow-md">
+                        <span className="absolute right-3 top-3 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1 text-[10px] font-mono text-white">
                           <Layers className="w-3 h-3" />
                           {imageCount}
                         </span>
                       )}
 
-                      {/* Condition badge */}
-                      <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide text-white drop-shadow-md">
+                      {/* Condition badge — colored by condition */}
+                      <span className={`absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full border backdrop-blur-sm ${getConditionColor(item.condition)}`}>
                         {item.condition}
                       </span>
                     </div>
 
                     {/* Card Details */}
-                    <div className="flex flex-1 flex-col justify-between space-y-4 pt-4">
+                    <div className="flex flex-1 flex-col justify-between space-y-3 p-4">
                       <div>
                         {/* Price */}
                         <div className="flex items-baseline justify-between mb-1.5">
-                          <span className="text-xl font-extrabold text-white tracking-tight">
+                          <span className="text-xl font-extrabold text-emerald-300 tracking-tight">
                             ₹{Number(item.price).toLocaleString()}
                           </span>
                           <span className="text-[10px] uppercase font-mono text-emerald-400">
@@ -470,8 +489,8 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                         </p>
                       </div>
 
-                      {/* Seller Footer */}
-                      <div className="flex items-center justify-between gap-3 text-xs">
+                      {/* Seller Footer with separator */}
+                      <div className="border-t border-white/[0.05] pt-3 flex items-center justify-between gap-3 text-xs">
                         <div className="flex items-center gap-2 min-w-0 pr-2">
                           <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-white overflow-hidden shrink-0">
                             {sellerPic ? (
