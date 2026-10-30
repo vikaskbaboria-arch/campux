@@ -25,7 +25,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   if (!conversation.members.some((memberId) => String(memberId) === String(senderId))) {
     throw new ApiError(403, "You are not a member of this conversation");
   }
-
+ 
   const message = await Message.create({
     conversationId,
     sender: senderId,

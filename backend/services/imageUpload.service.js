@@ -10,7 +10,7 @@ export const uploadImage = async (files) => {
     files.map(async (file) => {
       const result = await uploadOnCloudinary(file.path);
 
-      if (!result) {
+      if (!result?.secure_url || !result.public_id) {
         throw new ApiError(500, "Failed to upload image");
       }
 

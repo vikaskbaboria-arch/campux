@@ -12,11 +12,7 @@ app.set("io", io);
 
 
 
-console.log("Cloudinary cloud:", process.env.CLOUDINARY_CLOUD_NAME);
-console.log(
-  "Cloudinary key exists:",
-  !!process.env.CLOUDINARY_API_KEY
-);
+
 connectDB()
 .then(()=>{
     const port = process.env.PORT || 8000;

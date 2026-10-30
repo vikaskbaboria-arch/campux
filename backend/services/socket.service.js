@@ -1,5 +1,5 @@
+
 import { isValidObjectId } from "mongoose";
-import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
 import Conversation from "../models/conversation.model.js";
 import User from "../models/User.model.js";
