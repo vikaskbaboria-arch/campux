@@ -134,50 +134,29 @@ const College = () => {
       {/* Open campus identity and details */}
       <section className="pb-7">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-white/[0.08]">
-          {/* Logo / Monogram and College info */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full sm:w-auto">
-            <div className="relative shrink-0">
-              {college.logo ? (
-                <img
-                  src={college.logo}
-                  alt={college.name}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-contain p-2"
-                />
-              ) : (
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-zinc-900/80 border border-white/10 flex items-center justify-center text-xl sm:text-2xl font-extrabold text-white">
-                  {college.shortName || college.name?.[0]?.toUpperCase() || 'COL'}
-                </div>
+          {/* College info (no logo) */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight break-words">
+                {college.name}
+              </h1>
+              {college.shortName && (
+                <span className="text-xs uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/5">
+                  {college.shortName}
+                </span>
               )}
               {college.isVerified && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0a0a0a] border border-white/10 flex items-center justify-center">
-                  <span className="w-3.5 h-3.5 rounded-full bg-emerald-400"></span>
-                </div>
+                <span className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" />
+                  Verified Campus
+                </span>
               )}
             </div>
 
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight break-words">
-                  {college.name}
-                </h1>
-                {college.shortName && (
-                  <span className="text-xs uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/5">
-                    {college.shortName}
-                  </span>
-                )}
-                {college.isVerified && (
-                  <span className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" />
-                    Verified Campus
-                  </span>
-                )}
-              </div>
-
-              {/* Location */}
-              <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2">
-                <MapPin className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-                <span className="font-medium text-zinc-300">{locationText}</span>
-              </div>
+            {/* Location */}
+            <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2">
+              <MapPin className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+              <span className="font-medium text-zinc-300">{locationText}</span>
             </div>
           </div>
 

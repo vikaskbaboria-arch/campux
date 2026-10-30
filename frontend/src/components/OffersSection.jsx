@@ -141,7 +141,7 @@ const OffersSection = () => {
             const otherUser = activeTab === 'received'
               ? offer.buyer || {}
               : listing.seller || {};
-            const listingHref = listing._id ? `/listing/${listing._id}` : null;
+            const listingHref = listing._id ? `/post/${listing._id}` : null;
             const userHref = otherUser._id ? `/profile/${otherUser._id}` : null;
             const imageUrl = listing.images?.[0]?.url;
             const sellerCanRespond = activeTab === 'received' && offer.status === 'Pending';

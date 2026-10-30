@@ -45,30 +45,64 @@ export const AuthProvider = ({ children }) => {
 
   // Login handler
   const login = async ({ identifier, password }) => {
-    // identifier can be username or email
+    const raw = (identifier || '').trim();
+    const lower = raw.toLowerCase();
+
+    // Provide both username and email so neither is undefined in backend's $or: [{ username }, { email }] query
     const payload = {
       password,
-      ...(identifier.includes('@') ? { email: identifier.trim() } : { username: identifier.trim() }),
+      username: lower,
+      email: lower,
     };
 
-    const response = await api.post('/users/login', payload);
-    const data = response.data?.data;
+    try {
+      const response = await api.post('/users/login', payload);
+      const data = response.data?.data;
 
-    if (data) {
-      const loggedUser = data.user;
-      const accessToken = data.accessToken;
+      if (data) {
+        const loggedUser = data.user;
+        const accessToken = data.accessToken;
 
-      setUser(loggedUser);
-      setToken(accessToken);
+        setUser(loggedUser);
+        setToken(accessToken);
 
-      if (accessToken) {
-        localStorage.setItem('campux_token', accessToken);
+        if (accessToken) {
+          localStorage.setItem('campux_token', accessToken);
+        }
+        if (loggedUser) {
+          localStorage.setItem('campux_user', JSON.stringify(loggedUser));
+        }
       }
-      if (loggedUser) {
-        localStorage.setItem('campux_user', JSON.stringify(loggedUser));
+      return response.data;
+    } catch (err) {
+      // If lowercased attempt failed and raw had uppercase, try with raw casing
+      if (raw !== lower) {
+        const retryPayload = {
+          password,
+          username: raw,
+          email: raw,
+        };
+        const response = await api.post('/users/login', retryPayload);
+        const data = response.data?.data;
+
+        if (data) {
+          const loggedUser = data.user;
+          const accessToken = data.accessToken;
+
+          setUser(loggedUser);
+          setToken(accessToken);
+
+          if (accessToken) {
+            localStorage.setItem('campux_token', accessToken);
+          }
+          if (loggedUser) {
+            localStorage.setItem('campux_user', JSON.stringify(loggedUser));
+          }
+        }
+        return response.data;
       }
+      throw err;
     }
-    return response.data;
   };
 
   // Register handler

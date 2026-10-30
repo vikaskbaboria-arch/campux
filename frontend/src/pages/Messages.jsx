@@ -7,6 +7,8 @@ import {
   MessageCircle,
   Search,
   Send,
+  ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -322,211 +324,230 @@ const Messages = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] min-h-[26rem] w-full flex-1 overflow-hidden bg-[#080809]">
-      <aside className={`min-h-0 w-full shrink-0 flex-col border-r border-white/[0.08] bg-[#09090b] md:w-[340px] lg:w-[380px] ${conversationId ? 'hidden md:flex' : 'flex'}`}>
-        <div className="border-b border-white/[0.08] px-5 py-5 sm:px-6">
+    <div className="flex h-[calc(100dvh-3.5rem)] max-h-[calc(100dvh-3.5rem)] w-full flex-1 overflow-hidden bg-[#08080a]">
+      {/* Left Sidebar: Conversations List */}
+      <aside className={`h-full min-h-0 w-full shrink-0 flex-col border-r border-white/[0.08] bg-[#0c0c0e] md:w-[320px] lg:w-[360px] ${conversationId ? 'hidden md:flex' : 'flex'}`}>
+        <div className="border-b border-white/[0.08] px-4 py-4 sm:px-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">Your inbox</p>
-              <h1 className="mt-1 text-2xl font-bold tracking-tight text-white">Messages</h1>
+              <p className="text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-zinc-500">PEER CHAT</p>
+              <h1 className="mt-0.5 text-xl font-bold tracking-tight text-white font-heading">Messages</h1>
             </div>
-            <Link to="/" className="rounded-full border border-white/10 px-3 py-2 text-[11px] font-medium text-zinc-400 transition hover:border-white/20 hover:text-white">
-              Marketplace
+            <Link to="/" className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-medium text-zinc-400 transition hover:border-white/20 hover:text-white">
+              Feed
             </Link>
           </div>
-          <p className="mt-2 text-xs text-zinc-500">Offers, pickup details, and exchanges.</p>
-          <label className="mt-5 flex h-10 items-center gap-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-zinc-500 transition focus-within:border-white/20">
-            <Search className="h-4 w-4 shrink-0" />
+          <p className="mt-1 text-xs text-zinc-400">Campus offers, trade discussions & pickups.</p>
+          
+          {/* Search bar matching template */}
+          <label className="mt-3.5 flex h-9 items-center gap-2 rounded-xl border border-white/[0.08] bg-[#16161b] px-3 text-zinc-400 transition focus-within:border-amber-500/50">
+            <Search className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
             <input
               type="search"
               value={conversationQuery}
               onChange={(event) => setConversationQuery(event.target.value)}
-              placeholder="Search conversations"
+              placeholder="Search chats..."
               aria-label="Search conversations"
               className="min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-zinc-600"
             />
           </label>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-            {conversationsLoading ? (
-              <div className="flex items-center justify-center gap-2 px-5 py-10 text-xs text-zinc-500">
-                <LoaderCircle className="h-4 w-4 animate-spin" /> Loading conversations
+        {/* Conversations Scrollable List */}
+        <div className="flex-1 overflow-y-auto divide-y divide-white/[0.04]">
+          {conversationsLoading ? (
+            <div className="flex items-center justify-center gap-2 px-5 py-10 text-xs text-zinc-500">
+              <LoaderCircle className="h-4 w-4 animate-spin text-amber-400" /> Loading chats...
+            </div>
+          ) : conversationsError ? (
+            <p role="alert" className="px-5 py-6 text-xs text-red-300">{conversationsError}</p>
+          ) : conversations.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <MessageCircle className="mx-auto h-8 w-8 text-zinc-700" />
+              <p className="mt-3 text-sm font-semibold text-zinc-300">No chats yet</p>
+              <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                Offers and messages from listings will appear here automatically.
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <Link to="/" className="rounded-full bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200">
+                  Browse items
+                </Link>
               </div>
-            ) : conversationsError ? (
-              <p role="alert" className="px-5 py-6 text-xs text-red-300">{conversationsError}</p>
-            ) : conversations.length === 0 ? (
-              <div className="px-6 py-12 text-center">
-                <MessageCircle className="mx-auto h-8 w-8 text-zinc-700" />
-                <p className="mt-3 text-sm font-medium text-zinc-300">No messages found</p>
-                <p className="mt-1 text-xs leading-5 text-zinc-500">
-                  New offers create a chat automatically. You can review and respond to older offers on your offers page.
-                </p>
-                <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  <Link to="/offers" className="rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-black transition hover:bg-zinc-200">
-                    View offers
-                  </Link>
-                  <Link to="/" className="rounded-full border border-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-300 transition hover:border-white/25 hover:text-white">
-                    Browse listings
-                  </Link>
-                </div>
-              </div>
-            ) : visibleConversations.length === 0 ? (
-              <p className="px-5 py-8 text-center text-xs text-zinc-500">No conversations match "{conversationQuery}".</p>
-            ) : (
-              visibleConversations.map((item) => {
-                const person = getOtherMember(item, currentUserId);
-                const active = item._id === conversationId;
-                return (
-                  <Link
-                    key={item._id}
-                    to={`/messages/${item._id}`}
-                    aria-current={active ? 'page' : undefined}
-                    className={`relative flex items-center gap-3 border-b border-white/[0.05] px-4 py-4 transition hover:bg-white/[0.04] ${active ? 'bg-white/[0.07] before:absolute before:bottom-3 before:left-0 before:top-3 before:w-0.5 before:rounded-r before:bg-white' : ''}`}
-                  >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-semibold text-white ring-1 ring-white/10">
-                      {person?.profilePic ? (
-                        <img src={person.profilePic} alt="" className="h-full w-full object-cover" />
-                      ) : (
-                        person?.name?.[0]?.toUpperCase() || 'S'
-                      )}
+            </div>
+          ) : visibleConversations.length === 0 ? (
+            <p className="px-5 py-8 text-center text-xs text-zinc-500">No chats match "{conversationQuery}".</p>
+          ) : (
+            visibleConversations.map((item) => {
+              const person = getOtherMember(item, currentUserId);
+              const active = item._id === conversationId;
+              return (
+                <Link
+                  key={item._id}
+                  to={`/messages/${item._id}`}
+                  aria-current={active ? 'page' : undefined}
+                  className={`relative flex items-center gap-3 px-4 py-3.5 transition ${
+                    active ? 'bg-[#18181f] border-l-2 border-amber-400' : 'hover:bg-white/[0.03]'
+                  }`}
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-xs font-bold text-white ring-1 ring-white/10">
+                    {person?.profilePic ? (
+                      <img src={person.profilePic} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      person?.name?.[0]?.toUpperCase() || 'S'
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="truncate text-xs font-semibold text-zinc-100">{person?.name || 'Campus student'}</p>
+                      <span className="shrink-0 text-[10px] text-zinc-500 font-mono">{formatDate(item.updatedAt)}</span>
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="truncate text-[13px] font-semibold text-zinc-100">{person?.name || 'Campus student'}</p>
-                        <span className="shrink-0 text-[10px] text-zinc-600">{formatDate(item.updatedAt)}</span>
-                      </div>
-                      <p className="mt-1 truncate text-xs text-zinc-500">{item.lastMessage || 'Start the conversation'}</p>
-                    </div>
-                  </Link>
-                );
-              })
-            )}
+                    <p className="mt-0.5 truncate text-[11px] text-zinc-400">{item.lastMessage || 'Start conversation'}</p>
+                  </div>
+                </Link>
+              );
+            })
+          )}
         </div>
       </aside>
 
-      <section className={`min-h-0 min-w-0 flex-1 flex-col bg-[#0b0b0d] ${conversationId ? 'flex' : 'hidden md:flex'}`}>
+      {/* Right Section: Active Chat Viewport */}
+      {/* LOCKED HEIGHT, OVERFLOW HIDDEN, FIXED BOTTOM INPUT */}
+      <section className={`h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden relative bg-[#09090b] ${conversationId ? 'flex' : 'hidden md:flex'}`}>
         {conversationId ? (
           <>
-              <header className="flex items-center gap-3 border-b border-white/[0.08] px-4 py-4 sm:px-6">
-                <Link to="/messages" className="inline-flex shrink-0 items-center gap-2 rounded-full p-2 text-xs text-zinc-400 transition hover:bg-white/[0.06] hover:text-white" aria-label="Back to all conversations">
-                  <ArrowLeft className="h-4 w-4" />
-                  <span className="hidden sm:inline">All conversations</span>
-                </Link>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-semibold text-white">
-                  {otherMember?.profilePic ? (
-                    <img src={otherMember.profilePic} alt="" className="h-full w-full object-cover" />
-                  ) : (
-                    otherMember?.name?.[0]?.toUpperCase() || 'S'
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-white">{otherMember?.name || 'Conversation'}</p>
-                  <p className="flex items-center gap-1.5 truncate text-[11px] text-zinc-500">
-                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${socketConnected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-                    {socketConnected ? 'Live chat' : 'Connecting'}
-                    {otherMember?.username ? ` - @${otherMember.username}` : ''}
-                  </p>
-                </div>
-                {otherMember?._id && (
-                  <Link to={`/profile/${otherMember._id}`} aria-label="View student profile" className="rounded-full p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                )}
-              </header>
-
-              {chatContext && (
-                <div className="border-b border-white/[0.06] bg-white/[0.02] px-5 py-3 sm:px-6">
-                  <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                    {chatContext.kind === 'offer' ? 'Offer conversation' : 'Listing conversation'}
-                  </p>
-                  <p className="mt-1 truncate text-xs text-zinc-300">
-                    {chatContext.title || 'Marketplace listing'}
-                    {chatContext.amount ? ` | Offer ${chatContext.amount}` : ''}
-                    {chatContext.status ? ` | ${chatContext.status}` : ''}
-                  </p>
-                </div>
-              )}
-
-              <div className="flex-1 space-y-3 overflow-y-auto px-4 py-5 sm:px-6">
-                {threadLoading && messages.length === 0 ? (
-                  <div className="flex h-full min-h-48 items-center justify-center gap-2 text-xs text-zinc-500">
-                    <LoaderCircle className="h-4 w-4 animate-spin" /> Loading messages
-                  </div>
-                ) : threadError ? (
-                  <div className="mx-auto max-w-md rounded-2xl border border-red-500/20 bg-red-950/20 p-5 text-center">
-                    <p role="alert" className="text-sm text-red-300">{threadError}</p>
-                    <Link to="/messages" className="mt-4 inline-flex text-xs text-zinc-300 underline">Back to messages</Link>
-                  </div>
-                ) : messages.length === 0 ? (
-                  <div className="flex h-full min-h-48 flex-col items-center justify-center text-center">
-                    <MessageCircle className="h-7 w-7 text-zinc-700" />
-                    <p className="mt-3 text-sm font-medium text-zinc-300">No messages found</p>
-                    <p className="mt-1 text-xs text-zinc-500">Send a message to start the conversation.</p>
-                  </div>
+            {/* Header: Fixed at top of chat pane */}
+            <header className="shrink-0 flex items-center gap-3 border-b border-white/[0.08] bg-[#0c0c0e] px-4 py-3 sm:px-6 z-20">
+              <Link to="/messages" className="inline-flex shrink-0 items-center gap-1.5 rounded-lg p-1.5 text-xs text-zinc-400 transition hover:bg-white/[0.06] hover:text-white md:hidden" aria-label="Back to all conversations">
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-xs font-bold text-white ring-1 ring-white/10">
+                {otherMember?.profilePic ? (
+                  <img src={otherMember.profilePic} alt="" className="h-full w-full object-cover" />
                 ) : (
-                  messages.map((message) => {
-                    const isMine = getId(message.sender) === currentUserId;
-                    const peerHasRead = isMine && Array.isArray(message.readBy)
-                      && message.readBy.some((reader) => getId(reader) !== currentUserId);
-                    return (
-                      <div key={message._id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[85%] rounded-2xl px-4 py-3 sm:max-w-[72%] ${isMine ? 'rounded-br-md bg-white text-black' : 'rounded-bl-md border border-white/[0.08] bg-white/[0.04] text-zinc-100'}`}>
-                          <p className="whitespace-pre-wrap break-words text-sm leading-6">{message.text}</p>
-                          <div className={`mt-1.5 flex items-center justify-end gap-2 text-[10px] ${isMine ? 'text-zinc-500' : 'text-zinc-600'}`}>
-                            <span>{formatTime(message.createdAt)}</span>
-                            {peerHasRead && <span>Seen</span>}
-                          </div>
+                  otherMember?.name?.[0]?.toUpperCase() || 'S'
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs sm:text-sm font-bold text-white">{otherMember?.name || 'Conversation'}</p>
+                <p className="flex items-center gap-1.5 truncate text-[11px] text-zinc-400">
+                  <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${socketConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                  {socketConnected ? 'Live' : 'Connecting'}
+                  {otherMember?.username ? ` • @${otherMember.username}` : ''}
+                </p>
+              </div>
+              {otherMember?._id && (
+                <Link to={`/profile/${otherMember._id}`} aria-label="View profile" className="rounded-full p-2 text-zinc-400 hover:bg-white/[0.06] hover:text-white transition">
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              )}
+            </header>
+
+            {/* Context bar if opened from listing / offer */}
+            {chatContext && (
+              <div className="shrink-0 border-b border-white/[0.06] bg-amber-500/[0.04] px-4 py-2 sm:px-6">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-amber-400">
+                  {chatContext.kind === 'offer' ? 'Offer Negotiation' : 'Listing Discussion'}
+                </p>
+                <p className="mt-0.5 truncate text-xs text-zinc-300 font-medium">
+                  {chatContext.title || 'Marketplace Item'}
+                  {chatContext.amount ? ` • Offer Amount: ${chatContext.amount}` : ''}
+                  {chatContext.status ? ` • Status: ${chatContext.status}` : ''}
+                </p>
+              </div>
+            )}
+
+            {/* MESSAGES LIST - EXCLUSIVE SCROLLING REGION */}
+            {/* Increasing messages only scroll within this area; never pushes the input container */}
+            <div className="flex-1 min-h-0 w-full overflow-y-auto px-4 py-4 sm:px-6 space-y-3.5 scroll-smooth">
+              {threadLoading && messages.length === 0 ? (
+                <div className="flex h-full min-h-48 items-center justify-center gap-2 text-xs text-zinc-500">
+                  <LoaderCircle className="h-4 w-4 animate-spin text-amber-400" /> Loading messages...
+                </div>
+              ) : threadError ? (
+                <div className="mx-auto max-w-md rounded-xl border border-red-500/20 bg-red-950/20 p-4 text-center">
+                  <p role="alert" className="text-xs text-red-300">{threadError}</p>
+                  <Link to="/messages" className="mt-3 inline-flex text-xs text-zinc-300 underline">Back to conversations</Link>
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="flex h-full min-h-48 flex-col items-center justify-center text-center">
+                  <MessageCircle className="h-8 w-8 text-zinc-700" />
+                  <p className="mt-2 text-xs font-semibold text-zinc-300">No messages yet</p>
+                  <p className="mt-1 text-[11px] text-zinc-500">Say hello or ask questions regarding the campus item.</p>
+                </div>
+              ) : (
+                messages.map((message) => {
+                  const isMine = getId(message.sender) === currentUserId;
+                  const peerHasRead = isMine && Array.isArray(message.readBy)
+                    && message.readBy.some((reader) => getId(reader) !== currentUserId);
+                  return (
+                    <div key={message._id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 ${
+                        isMine
+                          ? 'rounded-br-sm bg-white text-black font-sans shadow-sm'
+                          : 'rounded-bl-sm border border-white/[0.08] bg-[#16161c] text-zinc-100 font-sans'
+                      }`}>
+                        <p className="whitespace-pre-wrap break-words text-xs sm:text-sm leading-relaxed">{message.text}</p>
+                        <div className={`mt-1 flex items-center justify-end gap-1.5 text-[9px] font-mono ${isMine ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                          <span>{formatTime(message.createdAt)}</span>
+                          {peerHasRead && <span className="text-emerald-600 font-bold">✓ Seen</span>}
                         </div>
                       </div>
-                    );
-                  })
-                )}
-                <div ref={bottomRef} />
-              </div>
+                    </div>
+                  );
+                })
+              )}
+              <div ref={bottomRef} />
+            </div>
 
-              <form onSubmit={handleSubmit} className="border-t border-white/[0.08] bg-[#09090b] px-3 py-3 sm:px-5 sm:py-4">
-                {sendError && <p role="alert" className="mb-2 px-1 text-xs text-red-300">{sendError}</p>}
-                <div className="flex items-end gap-2 rounded-2xl border border-white/[0.1] bg-white/[0.03] p-2 focus-within:border-white/25">
-                  <textarea
-                    value={draft}
-                    onChange={(event) => setDraft(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' && !event.shiftKey) {
-                        event.preventDefault();
-                        handleSubmit(event);
-                      }
-                    }}
-                    maxLength={2000}
-                    rows={1}
-                    placeholder="Write a message..."
-                    aria-label="Write a message"
-                    className="max-h-32 min-h-10 flex-1 resize-y bg-transparent px-2 py-2 text-sm leading-5 text-white outline-none placeholder:text-zinc-600"
-                  />
-                  <button
-                    type="submit"
-                    disabled={sending || !draft.trim() || Boolean(threadError)}
-                    className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-3.5 text-xs font-bold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    {sending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                    <span className="hidden sm:inline">Send</span>
-                  </button>
-                </div>
-                <p className="mt-2 px-1 text-[10px] text-zinc-600">Enter to send - Shift + Enter for a new line</p>
-              </form>
+            {/* FIXED CHAT INPUT BAR - LOCKED POSITION AT BOTTOM */}
+            {/* Will never move, displace or hide no matter how many messages are added */}
+            <form
+              onSubmit={handleSubmit}
+              className="shrink-0 sticky bottom-0 z-30 w-full border-t border-white/[0.08] bg-[#0c0c0e] px-3 py-3 sm:px-5 sm:py-3.5 shadow-lg"
+            >
+              {sendError && <p role="alert" className="mb-2 px-1 text-xs text-red-300">{sendError}</p>}
+              <div className="flex items-center gap-2 rounded-xl border border-white/[0.1] bg-[#16161b] p-1.5 focus-within:border-amber-500/60 focus-within:ring-1 focus-within:ring-amber-500/30 transition-all">
+                <textarea
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                      event.preventDefault();
+                      handleSubmit(event);
+                    }
+                  }}
+                  maxLength={2000}
+                  rows={1}
+                  placeholder="Write a message to student..."
+                  aria-label="Write a message"
+                  className="max-h-24 min-h-9 flex-1 resize-none bg-transparent px-3 py-1.5 text-xs sm:text-sm leading-5 text-white outline-none placeholder:text-zinc-500 font-sans"
+                />
+                <button
+                  type="submit"
+                  disabled={sending || !draft.trim() || Boolean(threadError)}
+                  className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-white px-3.5 text-xs font-bold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer shadow-sm"
+                >
+                  {sending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                  <span className="hidden sm:inline">Send</span>
+                </button>
+              </div>
+              <p className="mt-1 px-1 text-[10px] text-zinc-500 font-mono">
+                Enter to send · Shift + Enter for new line
+              </p>
+            </form>
           </>
         ) : (
-          <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-            <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.025]">
-              <div className="absolute inset-2 rounded-full border border-white/[0.05]" />
-              <MessageCircle className="relative h-9 w-9 text-zinc-500" strokeWidth={1.3} />
+          /* Empty Chat State */
+          <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#121215]">
+              <MessageCircle className="h-9 w-9 text-amber-400" />
             </div>
-            <h2 className="mt-6 text-lg font-semibold tracking-tight text-zinc-200">Your conversations, all in one place</h2>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-500">
-              Choose a conversation to pick up where you left off, or start a chat from an offer or listing.
+            <h2 className="mt-4 text-base font-bold text-zinc-200 font-heading">Direct Campus Conversations</h2>
+            <p className="mt-1.5 max-w-sm text-xs text-zinc-400 leading-relaxed">
+              Select a chat from the left panel to discuss prices, negotiate terms, or arrange campus handovers.
             </p>
-            <Link to="/" className="mt-6 rounded-full bg-white px-4 py-2.5 text-xs font-semibold text-black transition hover:bg-zinc-200">
-              Browse listings
+            <Link to="/" className="mt-5 rounded-full bg-white px-4 py-2 text-xs font-bold text-black hover:bg-zinc-200 transition">
+              Explore Listings
             </Link>
           </div>
         )}

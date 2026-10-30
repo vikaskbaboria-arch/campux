@@ -10,21 +10,26 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { login } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/profile';
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+
     if (!identifier.trim()) {
+      setErrorMessage('Enter your username or email.');
       showToast('Enter your username or email.', 'error');
       return;
     }
     if (!password) {
+      setErrorMessage('Enter your password.');
       showToast('Enter your password.', 'error');
       return;
     }
@@ -36,7 +41,9 @@ const Login = () => {
       navigate(from, { replace: true });
     } catch (err) {
       console.error('Login error:', err);
-      showToast(getFriendlyErrorMessage(err, 'Could not sign in. Check your details and try again.'), 'error');
+      const msg = getFriendlyErrorMessage(err, 'Could not sign in. Invalid credentials or network error.');
+      setErrorMessage(msg);
+      showToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -48,10 +55,10 @@ const Login = () => {
         {/* Container with gradient dark styling */}
         <div className="rounded-3xl bg-gradient-to-b from-[#0f1013] to-[#0a0a0c] border border-white/[0.08] p-6 sm:p-10 shadow-2xl shadow-black/80 relative">
 
-          {/* Decorative brand icon at top */}
+          {/* Decorative brand icon at top matching reference template */}
           <div className="flex justify-center mb-6">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <span className="font-mono text-sm font-bold tracking-tighter text-emerald-400">CX</span>
+            <div className="w-11 h-11 rounded-2xl bg-[#18181f] border border-white/10 flex items-center justify-center shadow-lg">
+              <span className="text-amber-400 font-extrabold text-xl select-none">✱</span>
             </div>
           </div>
 
@@ -66,6 +73,11 @@ const Login = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
+            {errorMessage && (
+              <div className="rounded-xl border border-red-500/25 bg-red-950/30 p-3.5 text-xs text-red-200 text-center">
+                {errorMessage}
+              </div>
+            )}
             <div>
               <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-2">
                 Username or Email

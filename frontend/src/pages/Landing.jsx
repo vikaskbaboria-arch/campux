@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import ThemeToggle from '../components/ThemeToggle';
 import { 
   ShoppingBag, 
   Tag, 
@@ -20,7 +19,7 @@ const SHOWCASE_PRODUCTS = [
     image: '/products/campus-cycle.png',
     imageAlt: 'Black commuter bicycle with yellow accents',
     imageBackdrop: 'bg-[#efecd9]',
-    stripColor: 'bg-emerald-500',
+    stripColor: 'bg-amber-500',
   },
   {
     id: 'tech',
@@ -216,7 +215,7 @@ const Landing = () => {
 
   return (
     <div className="flex-1 w-full bg-black text-zinc-100">
-      <section className="min-h-screen w-full flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <section className="min-h-screen w-full flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
       <div className="max-w-[1216px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-stretch my-auto">
         
         {/* ================= LEFT COLUMN ================= */}
@@ -228,11 +227,10 @@ const Landing = () => {
               {/* Brand Name */}
               <div className="flex items-center gap-3">
                 <Link to="/" className="inline-block group">
-                  <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase font-sans">
+                  <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase font-heading">
                     CAMPUX
                   </span>
                 </Link>
-                <ThemeToggle showLabel={false} />
               </div>
 
               {/* Multi-column Navigation Links */}
@@ -301,10 +299,10 @@ const Landing = () => {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
+            <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-3 sm:gap-4 pt-1">
               <Link
                 to={isAuthenticated ? '/profile' : '/register'}
-                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold flex items-center gap-2.5 transition-all shadow-lg shadow-emerald-500/25 cursor-pointer"
+                className="justify-center px-6 py-3 rounded-full bg-white hover:bg-zinc-200 text-black text-xs font-bold uppercase tracking-wider flex items-center gap-2.5 transition-all shadow-lg shadow-black/50 cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>Explore Marketplace</span>
@@ -312,7 +310,7 @@ const Landing = () => {
 
               <Link
                 to={isAuthenticated ? '/profile' : '/login'}
-                className="w-full sm:w-auto justify-center px-5 py-3 rounded-full border border-white/15 bg-transparent hover:bg-white/5 text-zinc-300 hover:text-white text-xs font-semibold flex items-center gap-2.5 transition-all cursor-pointer"
+                className="justify-center px-5 py-3 rounded-full border border-white/15 bg-transparent hover:bg-white/5 text-zinc-300 hover:text-white text-xs font-semibold flex items-center gap-2.5 transition-all cursor-pointer"
               >
                 <Tag className="w-4 h-4" />
                 <span>Start Selling</span>
@@ -353,17 +351,14 @@ const Landing = () => {
         </div>
 
         {/* ================= RIGHT COLUMN (Interactive Showcase Panel) ================= */}
-        <div className="lg:col-span-6 xl:col-span-7 flex flex-col">
-          {/* Premium card with gradient backdrop + ambient glow */}
-          <div className="h-full rounded-3xl sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden relative bg-gradient-to-br from-zinc-950 via-[#0d1a0d] to-zinc-950 ring-1 ring-white/5 landing-right-panel">
-            
-            {/* Ambient glow orb */}
-            <div className="landing-ambient-glow" aria-hidden="true" />
+        <div className="lg:col-span-6 xl:col-span-7 flex flex-col min-h-[420px] sm:min-h-[520px] lg:min-h-0">
+          {/* Dark template card with pitch dark backdrop matching reference template (no green tint) */}
+          <div className="h-full rounded-3xl sm:rounded-[36px] p-6 sm:p-8 flex flex-col justify-between overflow-hidden relative bg-[#121216] border border-white/[0.08] shadow-2xl">
 
             {/* Top Bar of right panel with "Get started" button */}
             <div className="flex items-center justify-between pb-6 sm:pb-8 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
                   Campus Marketplace Live
                 </span>
@@ -508,7 +503,7 @@ const Landing = () => {
 
           <div className={`about-reveal lg:col-span-5 ${isAboutVisible ? 'is-visible' : ''}`} style={{ '--reveal-delay': '160ms' }}>
             <span className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
               About the platform
             </span>
             <h2 className="mt-5 max-w-xl text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -546,7 +541,7 @@ const Landing = () => {
               </p>
               <Link
                 to={isAuthenticated ? '/profile' : '/register'}
-                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-emerald-300"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-amber-300"
               >
                 {ABOUT_MODES[activeAboutMode].action}
                 <ArrowUpRight className="h-4 w-4" />

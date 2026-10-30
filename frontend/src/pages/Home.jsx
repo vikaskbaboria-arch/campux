@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Landing from './Landing';
 import AddListingModal from '../components/AddListingModal';
@@ -10,10 +10,8 @@ import {
   Search, 
   Plus, 
   Building2, 
-  MapPin,
   Tag, 
   SlidersHorizontal, 
-  ArrowUpRight, 
   ShoppingBag, 
   AlertCircle, 
   Clock, 
@@ -22,7 +20,15 @@ import {
   RefreshCw, 
   Layers,
   Sparkles,
-  X
+  BookOpen,
+  Cpu,
+  Bike,
+  Package,
+  Home as HomeIcon,
+  Compass,
+  ArrowRight,
+  X,
+  CheckCircle2,
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -51,7 +57,52 @@ const SORT_OPTIONS = [
   { label: 'Oldest First', sortBy: 'createdAt', sortType: 'asc' },
 ];
 
-// Helper: get condition badge color
+// Reference Template Category Cards (matching Screenshot 1)
+const FEATURED_ROLE_CATEGORIES = [
+  {
+    category: 'Books',
+    title: 'Textbooks & Academics',
+    description: 'Engineering math, programming concepts, syllabus reference books & semester papers.',
+    icon: BookOpen,
+    badgeText: '210+ Campus Books',
+  },
+  {
+    category: 'Electronics',
+    title: 'Scientific Calculators & Tech',
+    description: 'FX-991EX calculators, laptop chargers, USB accessories, headphones & adaptors.',
+    icon: Cpu,
+    badgeText: '150+ Gadgets',
+  },
+  {
+    category: 'Accessories',
+    title: 'Lab Kits & Drafting Tools',
+    description: 'Mini drafters, drawing board sets, lab coats, aprons, and dissection kits.',
+    icon: Compass,
+    badgeText: '95+ Study Kits',
+  },
+  {
+    category: 'Notes',
+    title: 'Handwritten Exam Notes',
+    description: 'High-scoring lecture notes, past exam question solutions & quick revision sheets.',
+    icon: Layers,
+    badgeText: '320+ Notes Shared',
+  },
+  {
+    category: 'Furniture',
+    title: 'Dorm Living & Study Gear',
+    description: 'Ergonomic study lamps, room heaters, foldable study desks & storage organizers.',
+    icon: HomeIcon,
+    badgeText: '80+ Dorm Essentials',
+  },
+  {
+    category: 'Other',
+    title: 'Campus Cycles & Mobility',
+    description: 'Commuter bicycles, cycling helmets, cable locks & daily college transit gear.',
+    icon: Bike,
+    badgeText: '45+ Cycles & Gear',
+  },
+];
+
 const getConditionColor = (condition) => {
   switch (condition?.toLowerCase()) {
     case 'new':
@@ -69,7 +120,6 @@ const getConditionColor = (condition) => {
 const Home = () => {
   const { isAuthenticated, user, updateProfile } = useAuth();
 
-  // If not logged in, render the sleek landing page
   if (!isAuthenticated) {
     return <Landing />;
   }
@@ -78,6 +128,9 @@ const Home = () => {
 };
 
 const AuthenticatedHome = ({ user, updateProfile }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialCategory = searchParams.get('category') || 'All';
+
   const [listings, setListings] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -91,12 +144,11 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedCondition, setSelectedCondition] = useState('All');
   const [selectedSort, setSelectedSort] = useState(SORT_OPTIONS[0]);
 
   // Modals state
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
 
   const collegeId =
@@ -108,6 +160,14 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
       : 'Your College';
 
   const hasCollege = Boolean(collegeId);
+
+  // Sync category param if URL changes
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat && CATEGORIES.includes(cat)) {
+      setSelectedCategory(cat);
+    }
+  }, [searchParams]);
 
   const loadListings = useCallback(
     async (pageToLoad = 1) => {
@@ -159,158 +219,202 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
     setSubmittedQuery('');
   };
 
-  const handleListingCreated = () => {
-    loadListings(1);
-  };
-
   const handleSaveProfile = async (payload) => {
     const res = await updateProfile(payload);
     loadListings(1);
     return res;
   };
 
+  const handleSelectFeaturedCategory = (categoryName) => {
+    setSelectedCategory(categoryName);
+    setSearchParams(categoryName === 'All' ? {} : { category: categoryName });
+    // Scroll to feed section
+    document.getElementById('campus-feed-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div className="flex-1 w-full bg-black text-zinc-100 flex flex-col px-4 sm:px-6 lg:px-8 py-6 md:py-10">
-      <div className="max-w-[1216px] w-full mx-auto space-y-6">
+    <div className="flex-1 w-full bg-[#08080a] text-zinc-100 flex flex-col px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans">
+      <div className="max-w-[1240px] w-full mx-auto space-y-9">
         
-        {/* Missing College Alert Banner */}
-        {!hasCollege ? (
-          <div className="flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-8 sm:flex-row sm:items-center">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-zinc-300 text-xs font-mono uppercase tracking-wider">
+        {/* Missing College Alert */}
+        {!hasCollege && (
+          <div className="rounded-2xl border border-red-500/20 bg-[#140c0d] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-red-400 text-xs font-mono uppercase tracking-wider">
                 <AlertCircle className="w-4 h-4" />
-                <span>College Affiliation Required</span>
+                <span>Campus Link Required</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                Link your College to Browse Campus Listings
+              <h2 className="text-lg font-bold text-white font-heading">
+                Connect your University to View Campus Listings
               </h2>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-xl leading-relaxed">
-                Campux shows goods, books, and gadgets listed exclusively by students inside your university. Affiliate with your campus to start buying and selling with zero commissions.
+              <p className="text-xs text-zinc-400 max-w-xl">
+                Campux displays verified student listings exclusively inside your college. Set your campus affiliation to buy and trade directly with seniors and batchmates.
               </p>
             </div>
             <button
               onClick={() => setIsEditProfileModalOpen(true)}
-              className="shrink-0 border-b border-white/30 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-200 transition-colors hover:border-white hover:text-white cursor-pointer"
+              className="rounded-full bg-white px-5 py-2 text-xs font-bold text-black hover:bg-zinc-200 transition-colors shrink-0"
             >
-              Set College Now
+              Affiliate College
             </button>
-          </div>
-        ) : (
-          /* College Hero Header Banner */
-          <div className="flex flex-col items-start justify-between gap-6 border-b border-white/10 pb-7 md:flex-row md:items-end">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-400 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Campus Marketplace Live
-                </span>
-                <span className="text-[10px] font-mono text-zinc-500">
-                  • Zero Commission Peer Trade
-                </span>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Section header with decorative left accent */}
-                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight border-l-2 border-emerald-400 pl-3">
-                  Campus Marketplace
-                </h1>
-                {collegeId && (
-                  <Link
-                    to={`/college/${collegeId}`}
-                    className="inline-flex max-w-[min(55vw,280px)] items-center gap-1.5 rounded-md border border-white/10 px-2.5 py-1.5 text-xs text-zinc-300 transition-colors hover:border-white/25 hover:text-white"
-                    title={`View ${collegeName} campus listings`}
-                  >
-                    <MapPin className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                    <span className="truncate">{collegeName}</span>
-                    <ArrowUpRight className="h-3 w-3 shrink-0 text-zinc-500" />
-                  </Link>
-                )}
-              </div>
-
-              <p className="max-w-xl text-xs sm:text-sm text-zinc-400 font-light leading-relaxed">
-                Explore textbooks, electronics, cycles, and lab supplies listed by students on campus.
-              </p>
-            </div>
-
-            {/* Top Post Item Button - emerald upgrade */}
-            <div className="flex items-center gap-3 w-full md:w-auto">
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:shadow-lg hover:shadow-emerald-500/25 md:w-auto sm:text-sm cursor-pointer"
-              >
-                <Plus className="w-4 h-4 stroke-[2.5]" />
-                <span>Post Item for Sale</span>
-              </button>
-            </div>
           </div>
         )}
 
-        {/* Search & Filtering Bar */}
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-            {/* Search Input */}
-            <form onSubmit={handleSearchSubmit} className="relative flex-1">
-              <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
+        {/* Hero Header matching Screenshot 1: "Role-Wise Interview Questions" layout */}
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight font-heading">
+                Campus Marketplace & Peer Hub
+              </h1>
+              <p className="text-xs sm:text-sm text-zinc-400 mt-1 font-sans">
+                Comprehensive university essentials organized by role & category — from Textbooks to Electronics, Lab Kits to Dorm Living
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5 shrink-0">
+              <Link
+                to="/post/new"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold text-black hover:bg-zinc-200 transition-all shadow-md cursor-pointer whitespace-nowrap"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>Post Item for Sale</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Large Search Bar matching Screenshot 1 */}
+          <form onSubmit={handleSearchSubmit} className="pt-2">
+            <div className="relative flex items-center w-full rounded-xl border border-zinc-800 bg-[#121215] px-4 py-3 focus-within:border-amber-500/70 focus-within:ring-1 focus-within:ring-amber-500/40 transition-all shadow-lg">
+              <Search className="w-4 h-4 text-zinc-400 shrink-0 mr-3" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search textbooks, calculators, cycles, lab aprons..."
-                className="w-full border-0 border-b border-white/15 bg-transparent py-3 pl-11 pr-24 text-xs text-white placeholder-zinc-500 transition-colors focus:border-white/60 focus:outline-none focus:ring-0 sm:text-sm"
+                placeholder="Search listings (books, electronics, lab kits...)"
+                className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-zinc-500 outline-none font-sans"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={handleClearSearch}
-                  className="absolute right-14 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-white"
-                  title="Clear query"
+                  className="p-1 text-zinc-400 hover:text-white mr-2"
                 >
                   <X className="w-4 h-4" />
                 </button>
               )}
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1.5 text-xs font-semibold text-zinc-200 transition-colors hover:text-white cursor-pointer"
+                className="px-3 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-white transition-colors"
               >
                 Search
               </button>
-            </form>
+            </div>
+          </form>
+        </div>
 
-            {/* Condition Filter */}
-            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 w-full md:w-auto">
+        {/* Section 1: Template Category Cards Grid matching Screenshot 1 */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base sm:text-lg font-bold text-white font-heading">
+              Browse by Campus Category
+            </h2>
+            <span className="text-[11px] font-mono text-zinc-500">
+              {FEATURED_ROLE_CATEGORIES.length} Categories
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {FEATURED_ROLE_CATEGORIES.map((item) => {
+              const Icon = item.icon;
+              const isSelected = selectedCategory === item.category;
+
+              return (
+                <button
+                  key={item.category}
+                  type="button"
+                  onClick={() => handleSelectFeaturedCategory(item.category)}
+                  className={`text-left rounded-xl p-4 sm:p-5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-full ${
+                    isSelected
+                      ? 'bg-[#15151a] border border-amber-500/80 ring-1 ring-amber-500/40 shadow-lg shadow-black/60'
+                      : 'bg-[#121215] border border-zinc-800/80 hover:border-zinc-700 hover:bg-[#16161b]'
+                  }`}
+                >
+                  <div>
+                    {/* Top Row: Icon + Title */}
+                    <div className="flex items-center gap-3 mb-2.5">
+                      <div className={`p-2 rounded-lg shrink-0 ${
+                        isSelected 
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+                          : 'bg-zinc-800/80 text-zinc-300 border border-white/5'
+                      }`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <h3 className="text-sm font-bold text-white tracking-tight font-heading">
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-xs text-zinc-400 font-sans leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Bottom Meta */}
+                  <div className="mt-4 pt-3 border-t border-white/[0.05] flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                    <span className="flex items-center gap-1.5">
+                      <span className="text-zinc-600">≡</span>
+                      <span>{item.badgeText}</span>
+                    </span>
+                    <span className={`text-[10px] font-sans font-semibold uppercase ${
+                      isSelected ? 'text-amber-400' : 'text-zinc-500'
+                    }`}>
+                      {isSelected ? 'Selected' : 'View'}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Section 2: The Campus Feed with Filter Pills */}
+        <div id="campus-feed-section" className="space-y-6 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
+            <div>
+              <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">
+                ACTIVE LISTINGS
+              </p>
+              <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight font-heading mt-0.5">
+                {selectedCategory === 'All' ? 'All Campus Posts' : `${selectedCategory} Listings`}
+              </h2>
+            </div>
+
+            {/* Condition & Sort Dropdowns */}
+            <div className="flex items-center gap-2.5 flex-wrap">
               <select
                 value={selectedCondition}
                 onChange={(e) => setSelectedCondition(e.target.value)}
-                className="w-full sm:w-auto border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
-                title="Filter by condition"
+                className="rounded-lg border border-white/10 bg-[#16161b] px-3 py-1.5 text-xs text-zinc-300 focus:border-amber-500/60 focus:outline-none cursor-pointer"
               >
-                <option value="All" className="bg-zinc-900 text-white">All Conditions</option>
+                <option value="All" className="bg-zinc-900">All Conditions</option>
                 {CONDITIONS.filter((c) => c !== 'All').map((c) => (
-                  <option key={c} value={c} className="bg-zinc-900 text-white">
-                    {c}
-                  </option>
+                  <option key={c} value={c} className="bg-zinc-900">{c}</option>
                 ))}
               </select>
 
-              {/* Sort By Dropdown */}
               <select
                 value={`${selectedSort.sortBy}-${selectedSort.sortType}`}
                 onChange={(e) => {
                   const [sb, st] = e.target.value.split('-');
-                  const opt = SORT_OPTIONS.find(
-                    (o) => o.sortBy === sb && o.sortType === st
-                  );
+                  const opt = SORT_OPTIONS.find((o) => o.sortBy === sb && o.sortType === st);
                   if (opt) setSelectedSort(opt);
                 }}
-                className="w-full sm:w-auto border-0 border-b border-white/15 bg-transparent px-2 py-3 text-xs text-zinc-300 transition-colors focus:border-white/60 focus:outline-none cursor-pointer"
-                title="Sort listings"
+                className="rounded-lg border border-white/10 bg-[#16161b] px-3 py-1.5 text-xs text-zinc-300 focus:border-amber-500/60 focus:outline-none cursor-pointer"
               >
                 {SORT_OPTIONS.map((opt) => (
-                  <option
-                    key={`${opt.sortBy}-${opt.sortType}`}
-                    value={`${opt.sortBy}-${opt.sortType}`}
-                    className="bg-zinc-900 text-white"
-                  >
+                  <option key={`${opt.sortBy}-${opt.sortType}`} value={`${opt.sortBy}-${opt.sortType}`} className="bg-zinc-900">
                     {opt.label}
                   </option>
                 ))}
@@ -318,7 +422,7 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
             </div>
           </div>
 
-          {/* Category Horizontal Pills — upgraded active/inactive styles */}
+          {/* Category Horizontal Filter Pills */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
             {CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat;
@@ -326,10 +430,10 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0 transition-all cursor-pointer border ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase shrink-0 transition-all cursor-pointer border ${
                     isActive
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'border-transparent text-zinc-500 hover:text-white hover:bg-white/5'
+                      ? 'bg-amber-500/15 text-amber-300 border-amber-500/35 shadow-sm'
+                      : 'border-white/10 text-zinc-400 hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
                   {cat}
@@ -338,101 +442,40 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
             })}
           </div>
 
-          {/* Active filter summary if any filter is set */}
-          {(submittedQuery || selectedCategory !== 'All' || selectedCondition !== 'All') && (
-            <div className="flex items-center gap-2 text-xs text-zinc-400 flex-wrap pt-1">
-              <span className="font-mono text-zinc-500">Filters:</span>
-              {submittedQuery && (
-                <span className="flex items-center gap-1.5 font-mono text-zinc-200">
-                  &quot;{submittedQuery}&quot;
-                  <X
-                    className="w-3 h-3 cursor-pointer hover:text-red-400"
-                    onClick={handleClearSearch}
-                  />
-                </span>
-              )}
-              {selectedCategory !== 'All' && (
-                <span className="flex items-center gap-1.5 font-mono text-zinc-200">
-                  Category: {selectedCategory}
-                  <X
-                    className="w-3 h-3 cursor-pointer hover:text-red-400"
-                    onClick={() => setSelectedCategory('All')}
-                  />
-                </span>
-              )}
-              {selectedCondition !== 'All' && (
-                <span className="flex items-center gap-1.5 font-mono text-zinc-200">
-                  Condition: {selectedCondition}
-                  <X
-                    className="w-3 h-3 cursor-pointer hover:text-red-400"
-                    onClick={() => setSelectedCondition('All')}
-                  />
-                </span>
-              )}
+          {/* Feed Grid or Empty/Loading State */}
+          {loading ? (
+            <div className="min-h-[35vh] flex flex-col items-center justify-center gap-3">
+              <div className="w-8 h-8 border-2 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
+              <p className="text-xs font-mono text-zinc-500">Loading campus posts...</p>
+            </div>
+          ) : error ? (
+            <div className="space-y-3 py-12 text-center">
+              <AlertCircle className="mx-auto h-8 w-8 text-red-400" />
+              <h3 className="text-sm font-medium text-zinc-200">{error}</h3>
               <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setSubmittedQuery('');
-                  setSelectedCategory('All');
-                  setSelectedCondition('All');
-                }}
-                className="text-xs text-zinc-400 hover:text-white underline ml-2 cursor-pointer"
+                onClick={() => loadListings(1)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-4 py-1.5 text-xs font-semibold text-zinc-300 hover:text-white transition-colors"
               >
-                Reset all
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Retry</span>
               </button>
             </div>
-          )}
-        </div>
-
-        {/* Listings Grid / Content */}
-        {loading ? (
-          <div className="min-h-[40vh] flex flex-col items-center justify-center gap-3">
-            <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-            <p className="text-xs font-mono text-zinc-500">Loading campus listings...</p>
-          </div>
-        ) : error ? (
-          <div className="space-y-4 py-12 text-center">
-            <AlertCircle className="mx-auto h-9 w-9 text-red-300" />
-            <h3 className="text-base font-medium text-zinc-200">{error}</h3>
-            <button
-              onClick={() => loadListings(1)}
-              className="inline-flex items-center gap-2 border-b border-white/30 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-200 transition-colors hover:text-white cursor-pointer"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Retry</span>
-            </button>
-          </div>
-        ) : listings.length > 0 ? (
-          <div className="space-y-8">
-            <div className="flex items-end justify-between gap-4 border-b border-white/10 pb-3">
-              <div>
-                <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">The campus feed</p>
-                {/* Section header with decorative left accent */}
-                <h2 className="mt-1 text-lg font-semibold tracking-tight text-white border-l-2 border-emerald-400 pl-3">
-                  Find your next useful thing
-                </h2>
-              </div>
-              <span className="shrink-0 text-[10px] font-mono text-zinc-500">
-                {pagination.total || listings.length} items
-              </span>
-            </div>
-            <div className="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          ) : listings.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {listings.map((item) => {
                 const coverImage = item.images?.[0]?.url || null;
                 const imageCount = item.images?.length || 0;
                 const sellerName = item.seller?.name || 'Student';
-                const sellerUsername = item.seller?.username || 'user';
                 const sellerPic = item.seller?.profilePic || '';
 
                 return (
                   <Link
                     key={item._id}
-                    to={`/listing/${item._id}`}
-                    className="group flex min-w-0 flex-col transition-all duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 rounded-xl ring-1 ring-white/[0.07] shadow-lg shadow-black/40 hover:ring-emerald-500/30 hover:shadow-emerald-900/20 bg-[#111] overflow-hidden"
+                    to={`/post/${item._id}`}
+                    className="group flex flex-col rounded-xl border border-zinc-800/80 bg-[#121215] hover:border-amber-500/60 hover:ring-1 hover:ring-amber-500/30 transition-all duration-200 overflow-hidden shadow-md"
                   >
-                    {/* Image Container — flush to card top */}
-                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-800">
+                    {/* Image Cover */}
+                    <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
                       {coverImage ? (
                         <img
                           src={coverImage}
@@ -441,71 +484,60 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-zinc-600 transition-colors group-hover:text-zinc-400 bg-gradient-to-br from-zinc-900 to-zinc-800">
+                        <div className="absolute inset-0 flex items-center justify-center text-zinc-700 bg-zinc-900">
                           <ShoppingBag className="w-8 h-8" />
                         </div>
                       )}
 
-                      {/* Top Category Badge — styled pill */}
-                      <span className="absolute left-3 top-3 bg-black/60 backdrop-blur-sm rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-white">
+                      {/* Category Badge */}
+                      <span className="absolute left-2.5 top-2.5 bg-black/75 backdrop-blur-sm rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white border border-white/10">
                         {item.category}
                       </span>
 
-                      {/* Photo count indicator if multiple */}
-                      {imageCount > 1 && (
-                        <span className="absolute right-3 top-3 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1 text-[10px] font-mono text-white">
-                          <Layers className="w-3 h-3" />
-                          {imageCount}
-                        </span>
-                      )}
-
-                      {/* Condition badge — colored by condition */}
-                      <span className={`absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full border backdrop-blur-sm ${getConditionColor(item.condition)}`}>
+                      {/* Condition badge */}
+                      <span className={`absolute bottom-2.5 left-2.5 text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md border backdrop-blur-sm ${getConditionColor(item.condition)}`}>
                         {item.condition}
                       </span>
                     </div>
 
-                    {/* Card Details */}
-                    <div className="flex flex-1 flex-col justify-between space-y-3 p-4">
+                    {/* Card Content */}
+                    <div className="flex flex-1 flex-col justify-between p-4 space-y-3">
                       <div>
                         {/* Price */}
-                        <div className="flex items-baseline justify-between mb-1.5">
-                          <span className="text-xl font-extrabold text-emerald-300 tracking-tight">
+                        <div className="flex items-baseline justify-between mb-1">
+                          <span className="text-lg font-extrabold text-white tracking-tight font-heading">
                             ₹{Number(item.price).toLocaleString()}
                           </span>
-                          <span className="text-[10px] uppercase font-mono text-emerald-400">
+                          <span className="text-[10px] uppercase font-mono text-emerald-400 font-semibold">
                             {item.status || 'Available'}
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-base font-semibold text-zinc-100 group-hover:text-white line-clamp-2 leading-snug transition-colors">
+                        <h3 className="text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-amber-300 line-clamp-2 leading-snug transition-colors">
                           {item.title}
                         </h3>
 
                         {/* Description excerpt */}
-                        <p className="text-xs text-zinc-400 font-light line-clamp-2 mt-1 leading-relaxed">
+                        <p className="text-[11px] text-zinc-400 line-clamp-2 mt-1 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
 
-                      {/* Seller Footer with separator */}
-                      <div className="border-t border-white/[0.05] pt-3 flex items-center justify-between gap-3 text-xs">
-                        <div className="flex items-center gap-2 min-w-0 pr-2">
-                          <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-white overflow-hidden shrink-0">
+                      {/* Footer Seller */}
+                      <div className="border-t border-white/[0.06] pt-2.5 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-white overflow-hidden shrink-0">
                             {sellerPic ? (
-                              <img src={sellerPic} alt={sellerName} className="w-full h-full object-cover" />
+                              <img src={sellerPic} alt="" className="w-full h-full object-cover" />
                             ) : (
                               sellerName[0]?.toUpperCase() || 'S'
                             )}
                           </div>
-                          <span className="text-zinc-400 font-mono text-[11px] truncate">
-                            {sellerName}
-                          </span>
+                          <span className="truncate text-[11px] text-zinc-400">{sellerName}</span>
                         </div>
-
-                        <span className="text-zinc-300 group-hover:text-white flex items-center gap-1 text-[11px] font-semibold shrink-0 group-hover:translate-x-0.5 transition-transform">
-                          View <ArrowUpRight className="w-3.5 h-3.5" />
+                        <span className="text-[10px] font-mono text-zinc-500">
+                          View Post →
                         </span>
                       </div>
                     </div>
@@ -513,84 +545,52 @@ const AuthenticatedHome = ({ user, updateProfile }) => {
                 );
               })}
             </div>
-
-            {/* Pagination Controls */}
-            {pagination.totalPages > 1 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
-                <p className="text-xs font-mono text-zinc-400 text-center sm:text-left">
-                  Showing Page {pagination.page} of {pagination.totalPages} ({pagination.total} items)
-                </p>
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={!pagination.hasPreviousPage}
-                    onClick={() => loadListings(pagination.page - 1)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/10 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                    <span>Prev</span>
-                  </button>
-                  <button
-                    disabled={!pagination.hasNextPage}
-                    onClick={() => loadListings(pagination.page + 1)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/10 text-xs font-medium text-zinc-400 transition-colors hover:text-white disabled:opacity-40 cursor-pointer"
-                  >
-                    <span>Next</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          /* Empty State when no listings match */
-          <div className="space-y-4 py-12 text-center">
-            <ShoppingBag className="mx-auto h-8 w-8 text-zinc-500" />
-            <div>
-              <h3 className="text-lg font-bold text-white tracking-tight">
-                No items found
-              </h3>
-              <p className="text-xs text-zinc-400 max-w-md mx-auto mt-1 leading-relaxed">
-                {submittedQuery || selectedCategory !== 'All' || selectedCondition !== 'All'
-                  ? 'No listings currently match your selected filters. Try broadening your search or resetting filters.'
-                  : `There are currently no items posted in ${collegeName}. Be the first student to post an item for trade!`}
+          ) : (
+            <div className="py-14 text-center rounded-2xl border border-white/[0.06] bg-[#121215]">
+              <ShoppingBag className="mx-auto h-8 w-8 text-zinc-600 mb-2" />
+              <h3 className="text-sm font-semibold text-white">No items found</h3>
+              <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
+                No active listings match your current filters. Be the first to post an item in this category!
               </p>
-            </div>
-            <div className="pt-2 flex items-center justify-center gap-3">
-              {(submittedQuery || selectedCategory !== 'All' || selectedCondition !== 'All') ? (
-                <button
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSubmittedQuery('');
-                    setSelectedCategory('All');
-                    setSelectedCondition('All');
-                  }}
-                  className="px-2 py-2.5 text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white cursor-pointer"
-                >
-                  Clear Filters
-                </button>
-              ) : null}
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="inline-flex items-center gap-1.5 border-b border-white/30 px-1 py-2.5 text-xs font-semibold uppercase tracking-wider text-zinc-200 transition-colors hover:text-white cursor-pointer"
+              <Link
+                to="/post/new"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-bold text-black hover:bg-zinc-200 transition"
               >
-                <Plus className="w-4 h-4" />
-                <span>Post Your Item</span>
+                <Plus className="w-3.5 h-3.5" />
+                <span>Post an Item</span>
+              </Link>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+              <button
+                type="button"
+                disabled={pagination.page <= 1}
+                onClick={() => loadListings(pagination.page - 1)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-medium text-zinc-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/[0.04]"
+              >
+                <ChevronLeft className="w-4 h-4" /> Previous
+              </button>
+              <span className="text-xs font-mono text-zinc-500">
+                Page {pagination.page} of {pagination.totalPages}
+              </span>
+              <button
+                type="button"
+                disabled={pagination.page >= pagination.totalPages}
+                onClick={() => loadListings(pagination.page + 1)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3.5 py-2 text-xs font-medium text-zinc-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/[0.04]"
+              >
+                Next <ChevronRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
       </div>
 
-      {/* Add Listing Modal */}
-      <AddListingModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onListingCreated={handleListingCreated}
-        onOpenProfileEdit={() => setIsEditProfileModalOpen(true)}
-      />
-
-      {/* Edit Profile Modal (for updating college if not set) */}
+      {/* Edit Profile Modal if needed */}
       <EditProfileModal
         isOpen={isEditProfileModalOpen}
         onClose={() => setIsEditProfileModalOpen(false)}

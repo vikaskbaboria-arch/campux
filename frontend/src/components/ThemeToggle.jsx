@@ -2,21 +2,36 @@ import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
-const ThemeToggle = ({ className = '', showLabel = true }) => {
+const ThemeToggle = ({ className = '', showLabel = false }) => {
   const { theme, toggleTheme } = useTheme();
-  const nextTheme = theme === 'dark' ? 'light' : 'dark';
-  const Icon = theme === 'dark' ? Sun : Moon;
+  const isDark = theme === 'dark';
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={`Switch to ${nextTheme} mode`}
-      title={`Switch to ${nextTheme} mode`}
-      className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-white/25 hover:text-white ${className}`}
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      className={`relative inline-flex h-7 w-13 shrink-0 items-center rounded-full transition-colors duration-300 focus:outline-none border ${
+        isDark 
+          ? 'bg-[#18181b] border-white/10 hover:border-white/20' 
+          : 'bg-[#e4e4e7] border-zinc-300 hover:border-zinc-400'
+      } ${className}`}
     >
-      <Icon className="h-4 w-4" aria-hidden="true" />
-      {showLabel && <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>}
+      <span
+        className={`pointer-events-none inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-black text-white shadow-md transition-transform duration-300 ${
+          isDark ? 'translate-x-7 bg-white text-black' : 'translate-x-1 bg-zinc-800 text-amber-300'
+        }`}
+      >
+        {isDark ? (
+          <Moon className="h-3 w-3 text-black" fill="currentColor" strokeWidth={1} />
+        ) : (
+          <Sun className="h-3 w-3 text-amber-400" />
+        )}
+      </span>
+      {showLabel && (
+        <span className="sr-only">{isDark ? 'Dark mode' : 'Light mode'}</span>
+      )}
     </button>
   );
 };

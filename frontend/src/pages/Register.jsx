@@ -59,7 +59,7 @@ const Register = () => {
       try {
         await login({ identifier: username, password });
         showToast('Account created. Welcome to CAMPUX!', 'success');
-        navigate('/profile');
+        navigate('/');
       } catch {
         // Fallback to login redirect
         showToast('Account created. Please sign in to continue.', 'success');
@@ -79,10 +79,10 @@ const Register = () => {
         {/* Gradient dark card */}
         <div className="rounded-3xl bg-gradient-to-b from-[#0f1013] to-[#0a0a0c] border border-white/[0.08] p-6 sm:p-10 shadow-2xl shadow-black/80 relative">
 
-          {/* Decorative brand icon at top */}
+          {/* Decorative brand icon at top matching reference template */}
           <div className="flex justify-center mb-6">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <span className="font-mono text-sm font-bold tracking-tighter text-emerald-400">CX</span>
+            <div className="w-11 h-11 rounded-2xl bg-[#18181f] border border-white/10 flex items-center justify-center shadow-lg">
+              <span className="text-amber-400 font-extrabold text-xl select-none">✱</span>
             </div>
           </div>
 

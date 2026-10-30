@@ -2,29 +2,52 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #000000;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #08080a;
     color: #f4f4f5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', sans-serif;
+    letter-spacing: -0.025em;
   }
 }
 
 /* Custom sleek scrollbar for minimal dark aesthetics */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e1e1e;
+  background: #27272a;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e2e2e;
+  background: #3f3f46;
+}
+
+/* Amber/Orange card glow & border utilities matching reference template */
+.card-amber-glow {
+  box-shadow: 0 0 24px -4px rgba(245, 158, 11, 0.15);
+}
+
+.card-template {
+  background-color: #121215;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-template:hover, .card-template-active {
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.4), 0 8px 24px -6px rgba(0, 0, 0, 0.6);
 }
 
 /* Subtle glow utilities */

@@ -179,11 +179,7 @@ const ListingsSection = ({
                 <button
                   type="button"
                   onClick={() => {
-                    if (hasListingPage) {
-                      navigate(`/listing/${item._id}`);
-                    } else {
-                      setSelectedListing(item);
-                    }
+                    navigate(`/post/${item._id}`);
                   }}
                   className="w-full cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70"
                 >
